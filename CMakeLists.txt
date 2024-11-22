@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5.0)
+cmake_minimum_required(VERSION 3.15)
 project(Chess VERSION 0.1.0 LANGUAGES C CXX)
 
 
@@ -11,8 +11,9 @@ add_subdirectory(presentation)
 add_subdirectory(model)
 add_subdirectory(services)
 
-add_executable(Chess ${SOURCES_FILES})
+add_library(ChessLib ${SOURCES_FILES})
 
 include(CTest)
 enable_testing()
+add_subdirectory(test)
 
