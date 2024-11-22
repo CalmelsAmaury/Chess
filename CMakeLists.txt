@@ -10,6 +10,7 @@ ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
 add_subdirectory(presentation)
 add_subdirectory(model)
 add_subdirectory(services)
+include_directories(model)
 
 add_library(ChessLib ${SOURCES_FILES})
 
