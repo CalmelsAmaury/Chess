@@ -1,1 +1,6 @@
-toto# Chess
+# Chess
+#architecture 
+
+stagged 
+commit
+push
