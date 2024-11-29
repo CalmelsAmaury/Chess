@@ -6,9 +6,10 @@
     1.2 définir le format général du fichier
     1.3 écrire un exemple d'échiquier dans : https://github.com/CalmelsAmaury/Chess/blob/main/test/Chess.cfg
 
+ > décrire ce format dans un nouveau fichier format.md.
 Attendre la validation de cette étape.
 
-# 2 - créer dans la class Model un fonction permettant de charger le fichier échiquier
+# 2 - créer dans la class Model une fonction permettant de charger le fichier échiquier
      2.1 écrire une fonction de chargement d'un fichier text Model.load(path)
      2.2 interpreter le contenue du fichier et pour toutes les pièces, instancier une classe dérivant de la classe Piece
      2.3 ajouter l'instance à la liste des pieces du modèle : Model.pieces_
