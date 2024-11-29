@@ -2,106 +2,135 @@
 #include <vector>
 #include <string>
 #include <memory>
-
+#include <fstream>
+#include <iostream>
+#include <sstream>
 
 namespace chess
 {
-    struct Position {
-        Position(int _row, int _col) : row(_row), col(_col) {}
-
-        int row;
-        int col;
+    enum class Color
+    {
+        white,
+        black
     };
 
-    struct Piece {
-        Piece(const std::string& pieceName, const Position& piecePosition) : name(pieceName), position(piecePosition) {}
+    struct Position
+    {
+        Position(int row, char col) : row_(row), col_(col) {}
 
-        Position position;  
-        std::string name;
-        
+        int row_;
+        char col_;
     };
 
-    struct Pawn : Piece{
-        Pawn(const Position& position) : Piece("Pawn", position) {}
+    struct Piece
+    {
+        Piece(const std::string &pieceName, const Position &piecePosition, const Color &color) : name_(pieceName), position_(piecePosition), color_(color) {}
+
+        Position position_;
+        std::string name_;
+        Color color_;
     };
 
-    struct Rook : Piece{
-        Rook(const Position& position) : Piece("Rook", position) {}
+    struct Pawn : Piece
+    {
+        Pawn(const Position &position, Color color) : Piece("Pawn", position, color) {}
     };
 
-    struct Bishop : Piece{
-        Bishop(const Position& position) : Piece("Bishop", position) {}
+    struct Rook : Piece
+    {
+        Rook(const Position &position, Color color) : Piece("Rook", position, color) {}
     };
 
-    struct King : Piece{
-        King(const Position& position) : Piece("King", position) {}
+    struct Bishop : Piece
+    {
+        Bishop(const Position &position, Color color) : Piece("Bishop", position, color) {}
     };
 
-    struct Queen : Piece{
-        Queen(const Position& position) : Piece("Queen", position) {}
+    struct King : Piece
+    {
+        King(const Position &position, Color color) : Piece("King", position, color) {}
     };
 
-    struct Knight : Piece{
-        Knight(const Position& position) : Piece("Knight", position) {}
+    struct Queen : Piece
+    {
+        Queen(const Position &position, Color color) : Piece("Queen", position, color) {}
     };
 
-
-
+    struct Knight : Piece
+    {
+        Knight(const Position &position, Color color) : Piece("Knight", position, color) {}
+    };
 
     /**
      * construis le model compose de pions, tours, etc
      */
     class Model
     {
-        public:
+
+    public:
+        using PiecePtr = std::shared_ptr<Piece>;
+
         bool load(const std::string &path)
         {
-            // code pour loader le model
-            Pawn whitePawn1(Position(2,1));
-            Pawn whitePawn2(Position(2,2));
-            Pawn whitePawn3(Position(2,3));
-            Pawn whitePawn4(Position(2,4));
-            Pawn whitePawn5(Position(2,5));
-            Pawn whitePawn6(Position(2,6));
-            Pawn whitePawn7(Position(2,7));
-            Pawn whitePawn8(Position(2,8));
+            std::ifstream file(path);
 
-            Pawn blackPawn1(Position(7,1));
-            Pawn blackPawn2(Position(7,2));
-            Pawn blackPawn3(Position(7,3));
-            Pawn blackPawn4(Position(7,4));
-            Pawn blackPawn5(Position(7,5));
-            Pawn blackPawn6(Position(7,6));
-            Pawn blackPawn7(Position(7,7));
-            Pawn blackPawn8(Position(7,8));
+            // Check if the file was opened successfully
+            if (!file.is_open())
+            {
+                std::cerr << "Error: Could not open the file " << path << std::endl;
+                return false; // Exit with an error code
+            }
 
-            Bishop whiteBishop1(Position(1,3));
-            Bishop whiteBishop2(Position(1,6));
+            // Read the file line by line
+            std::string line;
+            while (std::getline(file, line))
+            { 
+                // Print each line to the console
+                std::cout << line << std::endl;
+                auto v=splitString(line, ',');
+                if(v[0]=="Queen"){
+                    auto row=std::stoi(v[3]);
+                    auto col=v[2][0];
+                    auto color=v[1][0];
+                    
+                    auto queen = std::make_shared<Queen>(Position(row, col), color=='w'? Color::white : Color::black);
+                    pieces_.push_back(queen);
+                }
+            }
 
-            Bishop blackBishop1(Position(8,3));
-            Bishop blackBishop2(Position(8,6));
+            // Close the file
+            file.close();
 
-            Rook whiteRook1(Position(1,1));
-            Rook whiteRook2(Position(1,8));
-
-            Rook blackRook1(Position(8,1));
-            Rook blackRook2(Position(8,8));
-
-            Knight whiteKnight1(Position(1,2));
-            Knight whiteKnight2(Position(1,7));
-
-            Knight blackKnight1(Position(8,2));
-            Knight blackKnight2(Position(8,7));
-
-            Queen whiteQueen(Position(1,4));
-
-            Queen blackQueen(Position(8,4));
-            
-            King whiteKing(Position(1,5));
-
-            King blackKing(Position(8,5));
+            return true;
         }
-        std::vector<std::shared_ptr<Piece>> pieces_;
+
+        PiecePtr GetQueen(Color color)
+        {
+            for (PiecePtr piece : pieces_)
+            {
+                if (piece->name_ == "Queen" && piece->color_ == color)
+                {
+                    return piece;
+                }
+            }
+            return nullptr;
+        }
+
+        std::vector<std::string> splitString(const std::string &str, char delimiter)
+        {
+            std::vector<std::string> tokens;
+            std::stringstream ss(str);
+            std::string token;
+
+            while (std::getline(ss, token, delimiter))
+            {
+                tokens.push_back(token);
+            }
+
+            return tokens;
+        }
+
+        std::vector<PiecePtr> pieces_;
     };
 
 }

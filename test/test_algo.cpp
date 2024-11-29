@@ -9,16 +9,18 @@ int main() {
 
 
     Model c;
-    auto loaded = c.load("Chess.cfg");
+    auto loaded = c.load("C:\\dev\\Chess\\test\\Chess.cfg");
     assert(loaded==true);
+    auto queen=c.GetQueen(Color::white);
+    assert(queen!=nullptr);
    /* Presentation pres;
     ClassAlgorithm algo;
     
     Move w=algo.nextMove(chess, Player::White);
-    assert(w==Move("tw1:h1"));
+    assert(w==Move("whiteRook:h1"));
     pres.show(chess);
     Move b=algo.nextMove(chess, Player::Black);
     pres.show(chess);
-    assert(w==Move("tb1:h1"));*/
+    assert(w==Move("blackRook:h8"));*/
     return 0;
 }
