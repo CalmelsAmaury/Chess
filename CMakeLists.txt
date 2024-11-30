@@ -14,6 +14,11 @@ include_directories(model)
 
 add_library(ChessLib ${SOURCES_FILES})
 
+
+ 
+
+ 
+
 include(CTest)
 enable_testing()
 add_subdirectory(test)

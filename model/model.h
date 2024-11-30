@@ -62,7 +62,7 @@ namespace chess
     };
 
     /**
-     * construis le model compose de pions, tours, etc
+     * construit le model compose de pions, tours, etc
      */
     class Model
     {
