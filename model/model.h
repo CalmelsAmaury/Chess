@@ -96,6 +96,46 @@ namespace chess
                     auto queen = std::make_shared<Queen>(Position(row, col), color=='w'? Color::white : Color::black);
                     pieces_.push_back(queen);
                 }
+                else if(v[0]=="King"){
+                    auto row=std::stoi(v[3]);
+                    auto col=v[2][0];
+                    auto color=v[1][0];
+                    
+                    auto king = std::make_shared<King>(Position(row, col), color=='w'? Color::white : Color::black);
+                    pieces_.push_back(king);
+                }
+                else if(v[0]=="Rook"){
+                    auto row=std::stoi(v[3]);
+                    auto col=v[2][0];
+                    auto color=v[1][0];
+                    
+                    auto rook = std::make_shared<Rook>(Position(row, col), color=='w'? Color::white : Color::black);
+                    pieces_.push_back(rook);
+                }
+                else if(v[0]=="Knight"){
+                    auto row=std::stoi(v[3]);
+                    auto col=v[2][0];
+                    auto color=v[1][0];
+                    
+                    auto knight = std::make_shared<Knight>(Position(row, col), color=='w'? Color::white : Color::black);
+                    pieces_.push_back(knight);
+                }
+                else if(v[0]=="Bishop"){
+                    auto row=std::stoi(v[3]);
+                    auto col=v[2][0];
+                    auto color=v[1][0];
+                    
+                    auto bishop = std::make_shared<Bishop>(Position(row, col), color=='w'? Color::white : Color::black);
+                    pieces_.push_back(bishop);
+                }
+                else if(v[0]=="Pawn"){
+                    auto row=std::stoi(v[3]);
+                    auto col=v[2][0];
+                    auto color=v[1][0];
+                    
+                    auto pawn = std::make_shared<Pawn>(Position(row, col), color=='w'? Color::white : Color::black);
+                    pieces_.push_back(pawn);
+                }
             }
 
             // Close the file
