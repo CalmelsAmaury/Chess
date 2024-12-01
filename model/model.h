@@ -24,41 +24,42 @@ namespace chess
 
     struct Piece
     {
-        Piece(const std::string &pieceName, const Position &piecePosition, const Color &color) : name_(pieceName), position_(piecePosition), color_(color) {}
+        Piece(int id, const std::string &pieceName, const Position &piecePosition, const Color &color) : id_(id), name_(pieceName), position_(piecePosition), color_(color) {}
 
         Position position_;
         std::string name_;
         Color color_;
+        int id_;
     };
 
     struct Pawn : Piece
     {
-        Pawn(const Position &position, Color color) : Piece("Pawn", position, color) {}
+        Pawn(int id, const Position &position, Color color) : Piece(id, "Pawn", position, color) {}
     };
 
     struct Rook : Piece
     {
-        Rook(const Position &position, Color color) : Piece("Rook", position, color) {}
+        Rook(int id, const Position &position, Color color) : Piece(id, "Rook", position, color) {}
     };
 
     struct Bishop : Piece
     {
-        Bishop(const Position &position, Color color) : Piece("Bishop", position, color) {}
+        Bishop(int id, const Position &position, Color color) : Piece(id, "Bishop", position, color) {}
     };
 
     struct King : Piece
     {
-        King(const Position &position, Color color) : Piece("King", position, color) {}
+        King(int id, const Position &position, Color color) : Piece(id, "King", position, color) {}
     };
 
     struct Queen : Piece
     {
-        Queen(const Position &position, Color color) : Piece("Queen", position, color) {}
+        Queen(int id, const Position &position, Color color) : Piece(id, "Queen", position, color) {}
     };
 
     struct Knight : Piece
     {
-        Knight(const Position &position, Color color) : Piece("Knight", position, color) {}
+        Knight(int id, const Position &position, Color color) : Piece(id, "Knight", position, color) {}
     };
 
     /**
@@ -88,52 +89,58 @@ namespace chess
                 // Print each line to the console
                 std::cout << line << std::endl;
                 auto v=splitString(line, ',');
-                if(v[0]=="Queen"){
-                    auto row=std::stoi(v[3]);
-                    auto col=v[2][0];
-                    auto color=v[1][0];
+                if(v[1]=="Queen"){
+                    auto row=std::stoi(v[4]);
+                    auto col=v[3][0];
+                    auto color=v[2][0];
+                    auto id=std::stoi(v[0]);
                     
-                    auto queen = std::make_shared<Queen>(Position(row, col), color=='w'? Color::white : Color::black);
+                    auto queen = std::make_shared<Queen>(id, Position(row, col), color=='w'? Color::white : Color::black);
                     pieces_.push_back(queen);
                 }
-                else if(v[0]=="King"){
-                    auto row=std::stoi(v[3]);
-                    auto col=v[2][0];
-                    auto color=v[1][0];
+                else if(v[1]=="King"){
+                    auto row=std::stoi(v[4]);
+                    auto col=v[3][0];
+                    auto color=v[2][0];
+                    auto id=std::stoi(v[0]);
                     
-                    auto king = std::make_shared<King>(Position(row, col), color=='w'? Color::white : Color::black);
+                    auto king = std::make_shared<King>(id, Position(row, col), color=='w'? Color::white : Color::black);
                     pieces_.push_back(king);
                 }
-                else if(v[0]=="Rook"){
-                    auto row=std::stoi(v[3]);
-                    auto col=v[2][0];
-                    auto color=v[1][0];
+                else if(v[1]=="Rook"){
+                    auto row=std::stoi(v[4]);
+                    auto col=v[3][0];
+                    auto color=v[2][0];
+                    auto id=std::stoi(v[0]);
                     
-                    auto rook = std::make_shared<Rook>(Position(row, col), color=='w'? Color::white : Color::black);
+                    auto rook = std::make_shared<Rook>(id, Position(row, col), color=='w'? Color::white : Color::black);
                     pieces_.push_back(rook);
                 }
-                else if(v[0]=="Knight"){
-                    auto row=std::stoi(v[3]);
-                    auto col=v[2][0];
-                    auto color=v[1][0];
+                else if(v[1]=="Knight"){
+                    auto row=std::stoi(v[4]);
+                    auto col=v[3][0];
+                    auto color=v[2][0];
+                    auto id=std::stoi(v[0]);
                     
-                    auto knight = std::make_shared<Knight>(Position(row, col), color=='w'? Color::white : Color::black);
+                    auto knight = std::make_shared<Knight>(id, Position(row, col), color=='w'? Color::white : Color::black);
                     pieces_.push_back(knight);
                 }
-                else if(v[0]=="Bishop"){
-                    auto row=std::stoi(v[3]);
-                    auto col=v[2][0];
-                    auto color=v[1][0];
+                else if(v[1]=="Bishop"){
+                    auto row=std::stoi(v[4]);
+                    auto col=v[3][0];
+                    auto color=v[2][0];
+                    auto id=std::stoi(v[0]);
                     
-                    auto bishop = std::make_shared<Bishop>(Position(row, col), color=='w'? Color::white : Color::black);
+                    auto bishop = std::make_shared<Bishop>(id, Position(row, col), color=='w'? Color::white : Color::black);
                     pieces_.push_back(bishop);
                 }
-                else if(v[0]=="Pawn"){
-                    auto row=std::stoi(v[3]);
-                    auto col=v[2][0];
-                    auto color=v[1][0];
+                else if(v[1]=="Pawn"){
+                    auto row=std::stoi(v[4]);
+                    auto col=v[3][0];
+                    auto color=v[2][0];
+                    auto id=std::stoi(v[0]);
                     
-                    auto pawn = std::make_shared<Pawn>(Position(row, col), color=='w'? Color::white : Color::black);
+                    auto pawn = std::make_shared<Pawn>(id, Position(row, col), color=='w'? Color::white : Color::black);
                     pieces_.push_back(pawn);
                 }
             }
@@ -151,6 +158,18 @@ namespace chess
                 if (piece->name_ == "Queen" && piece->color_ == color)
                 {
                     return piece;
+                }
+            }
+            return nullptr;
+        }
+
+        PiecePtr GetPiece(int id)
+        {
+            for(PiecePtr pieceId : pieces_)
+            {
+                if(pieceId->id_ == id)
+                {
+                    return pieceId;
                 }
             }
             return nullptr;

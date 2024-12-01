@@ -11,8 +11,10 @@ TEST(SampleTest, Example)
     auto loaded = c.load("C:\\dev\\Chess\\test\\Chess.cfg");
     EXPECT_TRUE(loaded);
     auto queen = c.GetQueen(Color::white);
+    auto piece = c.GetPiece(13);
 
     EXPECT_TRUE(queen != nullptr);
+    EXPECT_TRUE(piece != nullptr);
     /* Presentation pres;
      ClassAlgorithm algo;
 
