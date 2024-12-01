@@ -7,7 +7,7 @@
     1.3 écrire un exemple d'échiquier dans : https://github.com/CalmelsAmaury/Chess/blob/main/test/Chess.cfg
 
  > décrire ce format dans un nouveau fichier format.md.
-Attendre la validation de cette étape. VALIDER le 1/12/2024 
+Attendre la validation de cette étape. VALIDE le 1/12/2024 
 
 # 2 - créer dans la class Model une fonction permettant de charger le fichier échiquier
      2.1 écrire une fonction de chargement d'un fichier text Model.load(path)
@@ -18,7 +18,7 @@ Attendre la validation de cette étape. VALIDER le 1/12/2024
                      auto loaded = c.load("Chess.cfg");
                      assert(loaded==true);
 
-Attendre la validation de cette étape. VALIDER le 1/12/2024 
+Attendre la validation de cette étape. VALIDE le 1/12/2024 
 
 # 3 - ajouter un identifiant unique pour chaque pièce de l’échiquier.
 
@@ -40,9 +40,14 @@ De cette façon nous pouvons par la suite analyser le mouvement d’une pièce s
     3.2 modifier le load
     3.3 ajouter une fonction de recherche d'un pièce par son ID (un peux comme getPiece)
 
-Attendre la validation de cette étape. 
+Attendre la validation de cette étape. VALIDE LE 1/12/2024
 
-# 4 - exercice d'explication orale à Fabrice & Marylise du code (à la Feynman)
+# 4 - Créer une fonction save qui créer un nouveaau fichier contenant les pièces du modèle en mémoire de la classe Model.
+  4.1 Créer la fonction Model::save
+  4.2 ajouter cette fonction au fichier de test test_algo
+
+
+# 5 - exercice d'explication orale à Fabrice & Marylise du code (à la Feynman)
 
 Attendre la validation de cette étape. 
 
