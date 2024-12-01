@@ -42,7 +42,7 @@ De cette façon nous pouvons par la suite analyser le mouvement d’une pièce s
 
 Attendre la validation de cette étape. 
 
-# 4 - exercice d'exolication orale à Fabrice & Marylise du code (à la Feynman)
+# 4 - exercice d'explication orale à Fabrice & Marylise du code (à la Feynman)
 
 Attendre la validation de cette étape. 
 
