@@ -15,6 +15,9 @@ TEST(SampleTest, Example)
 
     EXPECT_TRUE(queen != nullptr);
     EXPECT_TRUE(piece != nullptr);
+
+    auto save = c.save();
+    EXPECT_TRUE(save);
     /* Presentation pres;
      ClassAlgorithm algo;
 

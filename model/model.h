@@ -91,7 +91,7 @@ namespace chess
                 auto v=splitString(line, ',');
                 if(v[1]=="Queen"){
                     auto row=std::stoi(v[4]);
-                    auto col=v[3][0];
+                        auto col=v[3][0];
                     auto color=v[2][0];
                     auto id=std::stoi(v[0]);
                     
@@ -187,6 +187,27 @@ namespace chess
             }
 
             return tokens;
+        }
+
+        bool save(){
+            int i = 1;
+            std::string fileName = "coupNumero" + std::to_string(i) + ".txt";
+
+            std::ofstream file(fileName);
+
+            if (!file.is_open())
+            {
+                std::cerr << "Error: Could not open the file " << fileName << std::endl;
+                return false; 
+            }
+
+            for(auto piece : pieces_){
+                file << piece << "\n";
+            }
+
+            file.close();
+
+            return true;
         }
 
         std::vector<PiecePtr> pieces_;
