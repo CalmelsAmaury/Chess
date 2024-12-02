@@ -26,6 +26,13 @@ namespace chess
     {
         Piece(int id, const std::string &pieceName, const Position &piecePosition, const Color &color) : id_(id), name_(pieceName), position_(piecePosition), color_(color) {}
 
+        std::string toString()
+        {
+            std::ostringstream oss;
+            oss << id_ << "," << name_ << "," << (color_ == Color::white ? 'w' : 'b') << "," << position_.col_ << "," << position_.row_;
+            return oss.str();
+        }
+
         Position position_;
         std::string name_;
         Color color_;
@@ -201,8 +208,8 @@ namespace chess
                 return false; 
             }
 
-            for(auto piece : pieces_){
-                file << piece << "\n";
+            for(auto& piece : pieces_){
+                file << piece->toString() << "\n";
             }
 
             file.close();
