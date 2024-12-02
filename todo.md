@@ -46,8 +46,14 @@ Attendre la validation de cette étape. VALIDE LE 1/12/2024
   4.1 Créer la fonction Model::save
   4.2 ajouter cette fonction au fichier de test test_algo
 
+Attendre la validation de cette étape. VALIDE LE 2/12/2024
 
-# 5 - exercice d'explication orale à Fabrice & Marylise du code (à la Feynman)
+# 5 - Définir l'algorithme qui calcul le prochain coup de l'échiquier pour une couleur
+  5.1 écrire cet algorithme en pseudo code dans un fichier texte (ne pas écrire de code c++)
+  
+Attendre la validation de cette étape.  
+
+# 6 - exercice d'explication orale à Fabrice & Marylise du code (à la Feynman)
 
 Attendre la validation de cette étape. 
 
