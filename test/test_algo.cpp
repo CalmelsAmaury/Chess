@@ -8,7 +8,7 @@ TEST(SampleTest, Example)
 {
 
     Model c;
-    auto loaded = c.load("C:\\dev\\Chess\\test\\Chess.cfg");
+    auto loaded = c.load("Chess.cfg");
     EXPECT_TRUE(loaded);
     auto queen = c.GetQueen(Color::white);
     auto piece = c.GetPiece(13);
