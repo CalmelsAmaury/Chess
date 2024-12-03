@@ -34,7 +34,11 @@ add_test(NAME TestChess COMMAND TestChess)
 # Add a post-build custom command to copy the file to the test directory
 set(SOURCE_FILE_PATH "${CMAKE_SOURCE_DIR}/test/Chess.cfg")
  
- 
+ # Copy Chess.cfg to the working directory
+add_custom_command(TARGET TestChess POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy ${SOURCE_FILE_PATH} "${CMAKE_BINARY_DIR}/test/Chess.cfg"
+  COMMENT "Copying Chess.cfg to the test working directory"
+)
 
 add_custom_command(TARGET TestChess POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy ${SOURCE_FILE_PATH} "$<TARGET_FILE_DIR:TestChess>/Chess.cfg"
