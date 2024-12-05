@@ -50,10 +50,15 @@ Attendre la validation de cette étape. VALIDE LE 2/12/2024
 
 # 5 - Définir l'algorithme qui calcul le prochain coup de l'échiquier pour une couleur
   5.1 écrire cet algorithme en pseudo code dans un fichier texte (ne pas écrire de code c++)
+
+  METHODOLOGIE
+  M1. ecrire le titre des grands chapitres de l'algo (choisir le plus simple)
+  M2. pour chaque chapitre, écrire le titre des sections signifiantes
+  M3. pour chaque section écrire le pseudo code
   
 Attendre la validation de cette étape.  
 
-# 6 - exercice d'explication orale à Fabrice & Marylise du code (à la Feynman)
+# 6 - exercice d'explication oral à Fabrice & Marylise du code (à la Feynman)
 
 Attendre la validation de cette étape. 
 
