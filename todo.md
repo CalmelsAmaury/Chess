@@ -43,18 +43,18 @@ De cette façon nous pouvons par la suite analyser le mouvement d’une pièce s
 Attendre la validation de cette étape. VALIDE LE 1/12/2024
 
 # 4 - Créer une fonction save qui créer un nouveaau fichier contenant les pièces du modèle en mémoire de la classe Model.
-  4.1 Créer la fonction Model::save
+  4.1 Créer la fonction Model::save\
   4.2 ajouter cette fonction au fichier de test test_algo
 
 Attendre la validation de cette étape. VALIDE LE 2/12/2024
 
-# 5 - Définir l'algorithme qui calcul le prochain coup de l'échiquier pour une couleur
-  5.1 écrire cet algorithme en pseudo code dans un fichier texte (ne pas écrire de code c++)
+# 5 - Définir l'algorithme qui calcul le prochain coup de l'échiquier pour une couleur\
+  5.1 écrire cet algorithme en pseudo code dans un fichier texte (ne pas écrire de code c++)\
 
-  METHODOLOGIE
-  M1. ecrire le titre des grands chapitres de l'algo (choisir le plus simple)
-  M2. pour chaque chapitre, écrire le titre des sections signifiantes
-  M3. pour chaque section écrire le pseudo code
+  METHODOLOGIE\
+  M1. ecrire le titre des grands chapitres de l'algo (choisir le plus simple)\
+  M2. pour chaque chapitre, écrire le titre des sections signifiantes\
+  M3. pour chaque section écrire le pseudo code\
   
 Attendre la validation de cette étape.  
 
