@@ -67,6 +67,7 @@ namespace chess
     struct Knight : Piece
     {
         Knight(int id, const Position &position, Color color) : Piece(id, "Knight", position, color) {}
+        std::vector<Position> nextPossibleMoves(Board board);
     };
 
     /**
@@ -238,8 +239,8 @@ namespace chess
     struct Board
     {
         
-        using BoardPositions = NextPossiblePositions[8][8];
-        BoardPositions board;
+        using BoardPositions = NextPossiblePositions;
+        BoardPositions board[8][8];
 
         Board buildModel(Model model)
         {
