@@ -45,12 +45,13 @@ namespace chess
 
  struct BoardPositions
     {
-        Model::PiecePtr piece;
+        PiecePtr piece;
         std::vector<Position> possiblePositions;
 
     };
 
  using Board = BoardPositions[8][8];
+ using BoardPtr = std::shared_ptr<Board>;
 
     struct Pawn : Piece
     {
@@ -248,12 +249,12 @@ namespace chess
         
         
 
-        Board CreateBoard()
+        BoardPtr CreateBoard()
         {
-           Board board;
+           BoardPtr board = std::make_shared<Board>(;)
             
              for(auto piece : model.pieces_){
-                board[piece->position_.col_][piece->position_.row_] = {piece};
+                board.get()[piece->position_.col_][piece->position_.row_] = {piece};
             }
                 
             return board;
