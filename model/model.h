@@ -243,9 +243,16 @@ namespace chess
 
         Board buildModel(Model model)
         {
-            for(auto piece : model.pieces_)
-            board[piece->position_.col_][piece->position_.row_]={piece, []};
-            else plateau[col][row] = nullptr;
+            for(auto piece : model.pieces_){
+                board[piece->position_.col_][piece->position_.row_] = {piece};
+            }
+
+            for(int i = 0; i < 8; i++){
+                for(int j = 0; j < 8; j++){
+                    board[i][j] = nullptr;
+                }
+            }
+                
             return board;
         }
     };
