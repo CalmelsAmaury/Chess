@@ -248,7 +248,7 @@ namespace chess
         
         
 
-        Board CreateBoard(Model model)
+        Board CreateBoard()
         {
            Board board;
            
