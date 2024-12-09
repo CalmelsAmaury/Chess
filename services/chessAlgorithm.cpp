@@ -20,13 +20,6 @@ class ChessAlgorithm{
        
 
 
- struct BoardPositions
-    {
-        Model::PiecePtr piece;
-        std::vector<Position> possiblePositions;
-
-    };
-
 
 
 };
