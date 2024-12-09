@@ -3,28 +3,29 @@
 
 class ChessAlgorithm{
     public:
-        void nextMove(chess::Model model, chess::Board board)
+        Board nextMove(Model& model )
         {
-            chess::NextPossiblePositions possiblePositions;
-            for(auto piece : model.pieces_) 
+           auto board = model.CreateBoard();
+            for(int row =0; row< 8; ++row) 
+                   for(int col =0; col< 8; ++col) 
             {   
-                if(isValidMove){
-                    possiblePositions.push_back(position)
-                } 
+                BoardPositions& bpos = board[row][col];
+                if(!bpos.piece) continue;
+               bpos.possiblePositions = bpos.piece->nextPossibleMoves();
+                
             }
+            return board;
         }
 
-        bool isValidMove(chess::Model::PiecePtr piece, chess::Position position, chess::Board board)
-        {
-            if(nextPos.piece && nextPos.piece->color_==piece->color_)
-            {
-                return false;
-            }
-            return true;
-        }
+       
 
 
+ struct BoardPositions
+    {
+        Model::PiecePtr piece;
+        std::vector<Position> possiblePositions;
 
+    };
 
 
 
