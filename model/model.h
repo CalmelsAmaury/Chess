@@ -27,7 +27,7 @@ namespace chess
     struct Piece
     {
         Piece(int id, const std::string &pieceName, const Position &piecePosition, const Color &color) : id_(id), name_(pieceName), position_(piecePosition), color_(color) {}
-
+virtual ~Piece() = default;
         std::string toString()
         {
             std::ostringstream oss;
@@ -35,6 +35,7 @@ namespace chess
             return oss.str();
         }
 
+ virtual std::vector<Position> nextPossibleMoves(BoardPtr board) {}
         Position position_;
         std::string name_;
         Color color_;
@@ -56,6 +57,9 @@ namespace chess
     struct Pawn : Piece
     {
         Pawn(int id, const Position &position, Color color) : Piece(id, "Pawn", position, color) {}
+   std::vector<Position> nextPossibleMoves(BoardPtr board) override {
+     
+ }
     };
 
     struct Rook : Piece
@@ -81,7 +85,7 @@ namespace chess
     struct Knight : Piece
     {
         Knight(int id, const Position &position, Color color) : Piece(id, "Knight", position, color) {}
-        std::vector<Position> nextPossibleMoves(Board board);
+       
     };
 
     /**
@@ -251,10 +255,10 @@ namespace chess
 
         BoardPtr CreateBoard()
         {
-           BoardPtr board = std::make_shared<Board>(;)
+           BoardPtr board = std::make_shared<Board>()
             
-             for(auto piece : model.pieces_){
-                board.get()[piece->position_.col_][piece->position_.row_] = {piece};
+             for(auto piece : pieces_){
+                (*board)[piece->position_.col_][piece->position_.row_] = {piece};
             }
                 
             return board;
