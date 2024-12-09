@@ -8,6 +8,8 @@
 
 namespace chess
 {
+
+
     enum class Color
     {
         white,
@@ -38,6 +40,17 @@ namespace chess
         Color color_;
         int id_;
     };
+
+  using PiecePtr = std::shared_ptr<Piece>;
+
+ struct BoardPositions
+    {
+        Model::PiecePtr piece;
+        std::vector<Position> possiblePositions;
+
+    };
+
+ using Board = BoardPositions[8][8];
 
     struct Pawn : Piece
     {
@@ -77,7 +90,7 @@ namespace chess
     {
 
     public:
-        using PiecePtr = std::shared_ptr<Piece>;
+      
 
         bool load(const std::string &path)
         {
@@ -229,21 +242,15 @@ namespace chess
         std::vector<PiecePtr> pieces_;
     };
 
-    struct NextPossiblePositions
-    {
-        Model::PiecePtr piece;
-        std::vector<Position> possiblePositions;
+   
 
-    };
-
-    struct Board
-    {
+   
         
-        using BoardPositions = NextPossiblePositions;
-        BoardPositions board[8][8];
+        
 
-        Board buildModel(Model model)
+        Board CreateBoard(Model model)
         {
+           Board board;
             for(auto piece : model.pieces_){
                 board[piece->position_.col_][piece->position_.row_] = {piece};
             }
@@ -256,6 +263,6 @@ namespace chess
                 
             return board;
         }
-    };
+    
 
 }
