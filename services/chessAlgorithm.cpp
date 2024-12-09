@@ -11,7 +11,7 @@ class ChessAlgorithm{
             {   
                 BoardPositions& bpos = (*board)[row][col];
                 if(!bpos.piece) continue;
-               bpos.possiblePositions = bpos.piece->nextPossibleMoves();
+               bpos.possiblePositions = bpos.piece->nextPossibleMoves(board);
                 
             }
             return board;
