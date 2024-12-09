@@ -251,7 +251,7 @@ namespace chess
             {
                 int col = piece->position_.col_-1;
                 int row = piece->position_.row_-1;
-
+std::cout << piece->toString() << std::endl;
                 if (col >= 0 && col < 8 && row >= 0 && row < 8)
                 {
                     BoardPositions& bp = ((*board)[col][row]);
