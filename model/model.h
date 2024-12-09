@@ -92,62 +92,68 @@ namespace chess
             // Read the file line by line
             std::string line;
             while (std::getline(file, line))
-            { 
+            {
                 // Print each line to the console
                 std::cout << line << std::endl;
-                auto v=splitString(line, ',');
-                if(v[1]=="Queen"){
-                    auto row=std::stoi(v[4]);
-                        auto col=v[3][0];
-                    auto color=v[2][0];
-                    auto id=std::stoi(v[0]);
-                    
-                    auto queen = std::make_shared<Queen>(id, Position(row, col), color=='w'? Color::white : Color::black);
+                auto v = splitString(line, ',');
+                if (v[1] == "Queen")
+                {
+                    auto row = std::stoi(v[4]);
+                    auto col = v[3][0];
+                    auto color = v[2][0];
+                    auto id = std::stoi(v[0]);
+
+                    auto queen = std::make_shared<Queen>(id, Position(row, col), color == 'w' ? Color::white : Color::black);
                     pieces_.push_back(queen);
                 }
-                else if(v[1]=="King"){
-                    auto row=std::stoi(v[4]);
-                    auto col=v[3][0];
-                    auto color=v[2][0];
-                    auto id=std::stoi(v[0]);
-                    
-                    auto king = std::make_shared<King>(id, Position(row, col), color=='w'? Color::white : Color::black);
+                else if (v[1] == "King")
+                {
+                    auto row = std::stoi(v[4]);
+                    auto col = v[3][0];
+                    auto color = v[2][0];
+                    auto id = std::stoi(v[0]);
+
+                    auto king = std::make_shared<King>(id, Position(row, col), color == 'w' ? Color::white : Color::black);
                     pieces_.push_back(king);
                 }
-                else if(v[1]=="Rook"){
-                    auto row=std::stoi(v[4]);
-                    auto col=v[3][0];
-                    auto color=v[2][0];
-                    auto id=std::stoi(v[0]);
-                    
-                    auto rook = std::make_shared<Rook>(id, Position(row, col), color=='w'? Color::white : Color::black);
+                else if (v[1] == "Rook")
+                {
+                    auto row = std::stoi(v[4]);
+                    auto col = v[3][0];
+                    auto color = v[2][0];
+                    auto id = std::stoi(v[0]);
+
+                    auto rook = std::make_shared<Rook>(id, Position(row, col), color == 'w' ? Color::white : Color::black);
                     pieces_.push_back(rook);
                 }
-                else if(v[1]=="Knight"){
-                    auto row=std::stoi(v[4]);
-                    auto col=v[3][0];
-                    auto color=v[2][0];
-                    auto id=std::stoi(v[0]);
-                    
-                    auto knight = std::make_shared<Knight>(id, Position(row, col), color=='w'? Color::white : Color::black);
+                else if (v[1] == "Knight")
+                {
+                    auto row = std::stoi(v[4]);
+                    auto col = v[3][0];
+                    auto color = v[2][0];
+                    auto id = std::stoi(v[0]);
+
+                    auto knight = std::make_shared<Knight>(id, Position(row, col), color == 'w' ? Color::white : Color::black);
                     pieces_.push_back(knight);
                 }
-                else if(v[1]=="Bishop"){
-                    auto row=std::stoi(v[4]);
-                    auto col=v[3][0];
-                    auto color=v[2][0];
-                    auto id=std::stoi(v[0]);
-                    
-                    auto bishop = std::make_shared<Bishop>(id, Position(row, col), color=='w'? Color::white : Color::black);
+                else if (v[1] == "Bishop")
+                {
+                    auto row = std::stoi(v[4]);
+                    auto col = v[3][0];
+                    auto color = v[2][0];
+                    auto id = std::stoi(v[0]);
+
+                    auto bishop = std::make_shared<Bishop>(id, Position(row, col), color == 'w' ? Color::white : Color::black);
                     pieces_.push_back(bishop);
                 }
-                else if(v[1]=="Pawn"){
-                    auto row=std::stoi(v[4]);
-                    auto col=v[3][0];
-                    auto color=v[2][0];
-                    auto id=std::stoi(v[0]);
-                    
-                    auto pawn = std::make_shared<Pawn>(id, Position(row, col), color=='w'? Color::white : Color::black);
+                else if (v[1] == "Pawn")
+                {
+                    auto row = std::stoi(v[4]);
+                    auto col = v[3][0];
+                    auto color = v[2][0];
+                    auto id = std::stoi(v[0]);
+
+                    auto pawn = std::make_shared<Pawn>(id, Position(row, col), color == 'w' ? Color::white : Color::black);
                     pieces_.push_back(pawn);
                 }
             }
@@ -172,9 +178,9 @@ namespace chess
 
         PiecePtr GetPiece(int id)
         {
-            for(PiecePtr pieceId : pieces_)
+            for (PiecePtr pieceId : pieces_)
             {
-                if(pieceId->id_ == id)
+                if (pieceId->id_ == id)
                 {
                     return pieceId;
                 }
@@ -196,7 +202,8 @@ namespace chess
             return tokens;
         }
 
-        bool save(){
+        bool save()
+        {
             int i = 1;
             std::string fileName = "coupNumero" + std::to_string(i) + ".txt";
 
@@ -205,10 +212,11 @@ namespace chess
             if (!file.is_open())
             {
                 std::cerr << "Error: Could not open the file " << fileName << std::endl;
-                return false; 
+                return false;
             }
 
-            for(auto& piece : pieces_){
+            for (auto &piece : pieces_)
+            {
                 file << piece->toString() << "\n";
             }
 
@@ -218,6 +226,28 @@ namespace chess
         }
 
         std::vector<PiecePtr> pieces_;
+    };
+
+    struct NextPossiblePositions
+    {
+        Model::PiecePtr piece;
+        std::vector<Position> possiblePositions;
+
+    };
+
+    struct Board
+    {
+        
+        using BoardPositions = NextPossiblePositions[8][8];
+        BoardPositions board;
+
+        Board buildModel(Model model)
+        {
+            for(auto piece : model.pieces_)
+            board[piece->position_.col_][piece->position_.row_]={piece, []};
+            else plateau[col][row] = nullptr;
+            return board;
+        }
     };
 
 }
