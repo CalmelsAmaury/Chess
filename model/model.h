@@ -249,8 +249,8 @@ namespace chess
 
             for (auto piece : pieces_)
             {
-                int col = piece->position_.col_;
-                int row = piece->position_.row_;
+                int col = piece->position_.col_-1;
+                int row = piece->position_.row_-1;
 
                 if (col >= 0 && col < 8 && row >= 0 && row < 8)
                 {
