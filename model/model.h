@@ -5,10 +5,10 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <array>
 
 namespace chess
 {
-
 
     enum class Color
     {
@@ -24,10 +24,23 @@ namespace chess
         char col_;
     };
 
+    class Piece;
+
+    using PiecePtr = std::shared_ptr<Piece>;
+
+    struct BoardPositions
+    {
+        PiecePtr piece;
+        std::vector<Position> possiblePositions;
+    };
+
+    using Board = std::array<std::array<BoardPositions, 8>, 8>;
+    using BoardPtr = std::shared_ptr<Board>;
+
     struct Piece
     {
         Piece(int id, const std::string &pieceName, const Position &piecePosition, const Color &color) : id_(id), name_(pieceName), position_(piecePosition), color_(color) {}
-virtual ~Piece() = default;
+        virtual ~Piece() = default;
         std::string toString()
         {
             std::ostringstream oss;
@@ -35,31 +48,20 @@ virtual ~Piece() = default;
             return oss.str();
         }
 
- virtual std::vector<Position> nextPossibleMoves(BoardPtr board) {}
+        virtual std::vector<Position> nextPossibleMoves(BoardPtr board) { return {}; }
         Position position_;
         std::string name_;
         Color color_;
         int id_;
     };
 
-  using PiecePtr = std::shared_ptr<Piece>;
-
- struct BoardPositions
-    {
-        PiecePtr piece;
-        std::vector<Position> possiblePositions;
-
-    };
-
- using Board = BoardPositions[8][8];
- using BoardPtr = std::shared_ptr<Board>;
-
     struct Pawn : Piece
     {
         Pawn(int id, const Position &position, Color color) : Piece(id, "Pawn", position, color) {}
-   std::vector<Position> nextPossibleMoves(BoardPtr board) override {
-     
- }
+        std::vector<Position> nextPossibleMoves(BoardPtr board) override
+        {
+            return {};
+        }
     };
 
     struct Rook : Piece
@@ -85,7 +87,6 @@ virtual ~Piece() = default;
     struct Knight : Piece
     {
         Knight(int id, const Position &position, Color color) : Piece(id, "Knight", position, color) {}
-       
     };
 
     /**
@@ -95,8 +96,6 @@ virtual ~Piece() = default;
     {
 
     public:
-      
-
         bool load(const std::string &path)
         {
             std::ifstream file(path);
@@ -244,25 +243,30 @@ virtual ~Piece() = default;
             return true;
         }
 
-        std::vector<PiecePtr> pieces_;
-    };
-
-   
-
-   
-        
-        
-
         BoardPtr CreateBoard()
         {
-           BoardPtr board = std::make_shared<Board>()
-            
-             for(auto piece : pieces_){
-                (*board)[piece->position_.col_][piece->position_.row_] = {piece};
+            BoardPtr board = std::shared_ptr<Board>(new Board());
+
+            for (auto piece : pieces_)
+            {
+                int col = piece->position_.col_;
+                int row = piece->position_.row_;
+
+                if (col >= 0 && col < 8 && row >= 0 && row < 8)
+                {
+                    BoardPositions& bp = ((*board)[col][row]);
+                    bp.piece = piece;
+                }
+                else
+                {
+                    throw std::out_of_range("Piece position out of board bounds");
+                }
             }
-                
+
             return board;
         }
-    
+
+        std::vector<PiecePtr> pieces_;
+    };
 
 }

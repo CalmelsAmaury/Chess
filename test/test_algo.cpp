@@ -1,7 +1,7 @@
 
 #include <gtest/gtest.h>
 #include "model.h"
-
+#include "ChessAlgorithm.h"
 using namespace chess;
 
 TEST(SampleTest, Example)
@@ -18,6 +18,9 @@ TEST(SampleTest, Example)
 
     auto save = c.save();
     EXPECT_TRUE(save);
+ChessAlgorithm algo;
+algo.nextMove(c);
+
     /* Presentation pres;
      ClassAlgorithm algo;
 

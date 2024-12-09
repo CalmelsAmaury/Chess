@@ -1,6 +1,7 @@
 #include <model.h>
 #include <vector>
-
+namespace chess
+{
 class ChessAlgorithm{
     public:
         BoardPtr nextMove(Model& model )
@@ -16,10 +17,6 @@ class ChessAlgorithm{
             }
             return board;
         }
-
-       
-
-
-
-
+ 
 };
+}
