@@ -7,10 +7,11 @@
         "name": "Debug Test",
         "type": "cppvsdbg",
         "request": "launch",
+        
         "program": "${workspaceFolder}/build/test/Debug/TestChess.exe",
         "args": [],
         "stopAtEntry": false,
-        "cwd": "${workspaceFolder}",
+        "cwd": "${workspaceFolder}/test",
         "environment": [],
         "console": "integratedTerminal"
       }

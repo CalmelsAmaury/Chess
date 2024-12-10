@@ -18,8 +18,8 @@ TEST(SampleTest, Example)
 
     auto save = c.save();
     EXPECT_TRUE(save);
-ChessAlgorithm algo;
-algo.nextMove(c);
+    ChessAlgorithm algo;
+    algo.nextMove(c);
 
     /* Presentation pres;
      ClassAlgorithm algo;
