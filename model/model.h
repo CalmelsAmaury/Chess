@@ -76,11 +76,11 @@ namespace chess
             std::vector<Position> nextPos;
             if(isValidMove(board))
             {
+                nextPos.push_back(Position(nextPosRow, nextPosCol));
                 if(color_ == Color::white && position_.row_ == 2 || color_ == Color::black && position_.row_ == 7){
-                    direction * 2;
+                    nextPosRow = position_.row_ + direction * 2;
                     nextPos.push_back(Position(nextPosRow, nextPosCol));
                 }
-                nextPos.push_back(Position(nextPosRow, nextPosCol));
             }
             return nextPos;
         }
