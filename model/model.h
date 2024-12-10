@@ -50,6 +50,14 @@ namespace chess
             return oss.str();
         }
 
+        bool isValidMove(BoardPtr board)
+        {
+            auto nextPos = (*board)[position_.row_][position_.col_].piece;
+            if(!nextPos || nextPos->color_ == color_){
+                return false;
+            }
+        }
+
         virtual std::vector<Position> nextPossibleMoves(BoardPtr board) { return {}; }
         Position position_;
         std::string name_;
@@ -61,8 +69,15 @@ namespace chess
     {
         Pawn(int id, const Position &position, Color color) : Piece(id, "Pawn", position, color) {}
         std::vector<Position> nextPossibleMoves(BoardPtr board) override
-        {
-            return {};
+        {   
+            
+            if(isValidMove)
+            {
+                if(color_ == Color::white && position_.row_ == 2 || color_ == Color::black == 7){
+                    
+                }
+                return {};
+            }
         }
     };
 
