@@ -70,11 +70,11 @@ namespace chess
         Pawn(int id, const Position &position, Color color) : Piece(id, "Pawn", position, color) {}
         std::vector<Position> nextPossibleMoves(BoardPtr board) override
         {   
-            
-            if(isValidMove)
+            int direction(color_ == Color::white ? +1 : -1);
+            if(isValidMove(board))
             {
-                if(color_ == Color::white && position_.row_ == 2 || color_ == Color::black == 7){
-                    
+                if(color_ == Color::white && position_.row_ == 2 || color_ == Color::black && position_.row_ == 7){
+                    direction * 2;
                 }
                 return {};
             }
