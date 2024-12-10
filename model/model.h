@@ -71,13 +71,18 @@ namespace chess
         std::vector<Position> nextPossibleMoves(BoardPtr board) override
         {   
             int direction(color_ == Color::white ? +1 : -1);
+            int nextPosRow = position_.row_ + direction;
+            int nextPosCol = position_.col_;
+            std::vector<Position> nextPos;
             if(isValidMove(board))
             {
                 if(color_ == Color::white && position_.row_ == 2 || color_ == Color::black && position_.row_ == 7){
                     direction * 2;
+                    nextPos.push_back(Position(nextPosRow, nextPosCol));
                 }
-                return {};
+                nextPos.push_back(Position(nextPosRow, nextPosCol));
             }
+            return nextPos;
         }
     };
 
