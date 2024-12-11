@@ -138,12 +138,12 @@ namespace chess
             auto direction = getDirection();
             auto positionLeft = Position(position_.row_ + direction, position_.col_ - 1);
             auto positionRight = Position(position_.row_ + direction, position_.col_ + 1);
-
-            if(!isEmptyCell(board, positionLeft) && isEnemy(board, positionLeft))
+            
+            if(isInRange(board, positionLeft) && !isEmptyCell(board, positionLeft) && isEnemy(board, positionLeft))
             {
                 possiblePositions.push_back(positionLeft);
             }
-            if(!isEmptyCell(board, positionRight) && isEnemy(board, positionLeft))
+            if(isInRange(board, positionLeft) && !isEmptyCell(board, positionRight) && isEnemy(board, positionLeft))
             {
                 possiblePositions.push_back(positionRight);
             }
