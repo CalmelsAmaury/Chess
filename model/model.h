@@ -53,9 +53,10 @@ namespace chess
         bool isValidMove(BoardPtr board)
         {
             auto nextPos = (*board)[position_.row_][position_.col_].piece;
-            if(!nextPos || nextPos->color_ == color_){
+            if(nextPos && nextPos->color_ == color_){
                 return false;
             }
+            return true;
         }
 
         virtual std::vector<Position> nextPossibleMoves(BoardPtr board) { return {}; }
