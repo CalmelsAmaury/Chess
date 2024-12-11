@@ -116,7 +116,18 @@ namespace chess
         // Il ne peut capturer une pièce adverse que si elle se trouve à une case en diagonale de lui dans son sens de déplacement
         void ruleMoveDiagonal(BoardPtr board, std::vector<Position> &possiblePositions)
         {
-            // TODO
+            auto direction = getDirection();
+            auto positionLeft = Position(position_.row_ + direction, position_.col_ - 1);
+            auto positionRight = Position(position_.row_ + direction, position_.col_ + 1);
+
+            if(!isEmptyCell(board, positionLeft))
+            {
+                possiblePositions.push_back(positionLeft);
+            }
+            if(!isEmptyCell(board, positionRight))
+            {
+                possiblePositions.push_back(positionRight);
+            }
         }
 
         // calcule la liste des possibles positions de la pièce
@@ -125,6 +136,7 @@ namespace chess
             std::vector<Position> positions;
             ruleMoveOnCases(board, positions);
             ruleMoveTwoCases(board, positions);
+            ruleMoveDiagonal(board, positions);
             return positions;
         }
     };
