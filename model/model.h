@@ -77,6 +77,15 @@ namespace chess
             return false;
         }
 
+        bool isInRange(BoardPtr board, const Position &pos)
+        {
+            if(pos.col_ >= 0 && pos.col_ < 8 && pos.row_ >= 0 && pos.row_ < 8)
+            {
+                return true;
+            }
+            return false;
+        }
+
         virtual std::vector<Position> nextPossibleMoves(BoardPtr board) { return {}; }
         Position position_;
         std::string name_;
