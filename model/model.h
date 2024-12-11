@@ -18,7 +18,11 @@ namespace chess
 
     struct Position
     {
-        Position(int row, char col) : row_(row), col_(static_cast<int>(col - 'a'))
+        explicit Position(int row, char col) : row_(row), col_(static_cast<int>(col - 'a'))
+        {
+        }
+
+        explicit Position(int row, int col) : row_(row), col_(col)
         {
         }
 
@@ -50,13 +54,17 @@ namespace chess
             return oss.str();
         }
 
-        bool isValidMove(BoardPtr board)
+        static PiecePtr getPiece(BoardPtr board, const Position &pos)  
         {
-            auto nextPos = (*board)[position_.row_][position_.col_].piece;
-            if(nextPos && nextPos->color_ == color_){
-                return false;
-            }
-            return true;
+            return (*board)[pos.row_][pos.col_].piece;
+        }
+
+        static bool isEmptyCell(BoardPtr board, const Position &pos) 
+        {
+            auto piece = (*board)[pos.row_][pos.col_].piece;
+            if (!piece)
+                return true;
+            return false;
         }
 
         virtual std::vector<Position> nextPossibleMoves(BoardPtr board) { return {}; }
@@ -68,22 +76,56 @@ namespace chess
 
     struct Pawn : Piece
     {
+        bool isFirstMove = true;
         Pawn(int id, const Position &position, Color color) : Piece(id, "Pawn", position, color) {}
-        std::vector<Position> nextPossibleMoves(BoardPtr board) override
-        {   
+
+        // avance de 1 dans la direction de la couleur
+        int getDirection()
+        {
             int direction(color_ == Color::white ? +1 : -1);
-            int nextPosRow = position_.row_ + direction;
-            int nextPosCol = position_.col_;
-            std::vector<Position> nextPos;
-            if(isValidMove(board))
+            return direction;
+        }
+
+        // Le pion se déplace droit devant lui (vers la 8e rangée pour les Blancs et vers la 1re rangée pour les Noirs),
+        // d'une seule case à chaque coup et sans jamais pouvoir reculer7.
+        void ruleMoveOnCases(BoardPtr board, std::vector<Position> &possiblePositions)
+        {
+            auto direction = getDirection();
+            auto position = Position(position_.row_ + direction, position_.col_);
+            if (isEmptyCell(board, position))
             {
-                nextPos.push_back(Position(nextPosRow, nextPosCol));
-                if(color_ == Color::white && position_.row_ == 2 || color_ == Color::black && position_.row_ == 7){
-                    nextPosRow = position_.row_ + direction * 2;
-                    nextPos.push_back(Position(nextPosRow, nextPosCol));
+                possiblePositions.push_back(position);
+            }
+        }
+
+        // Lors de son premier déplacement (alors qu'il est sur sa case initiale), un pion peut avancer de deux cases en un seul coup
+        void ruleMoveTwoCases(BoardPtr board, std::vector<Position> &possiblePositions)
+        {
+            if(!isFirstMove) return;
+            auto direction = getDirection();
+            if (color_ == Color::white && position_.row_ == 2 || color_ == Color::black && position_.row_ == 7)
+            {
+                auto position = Position(position_.row_ + direction * 2, position_.col_);
+                if (isEmptyCell(board, position))
+                {
+                    possiblePositions.push_back(position);
                 }
             }
-            return nextPos;
+        }
+
+        // Il ne peut capturer une pièce adverse que si elle se trouve à une case en diagonale de lui dans son sens de déplacement
+        void ruleMoveDiagonal(BoardPtr board, std::vector<Position> &possiblePositions)
+        {
+            // TODO
+        }
+
+        // calcule la liste des possibles positions de la pièce
+        std::vector<Position> nextPossibleMoves(BoardPtr board) override
+        {
+            std::vector<Position> positions;
+            ruleMoveOnCases(board, positions);
+            ruleMoveTwoCases(board, positions);
+            return positions;
         }
     };
 
@@ -137,9 +179,9 @@ namespace chess
                 // Print each line to the console
                 std::cout << line << std::endl;
                 auto v = splitString(line, ',');
-                auto row = std::stoi(v[4])-1;
+                auto row = std::stoi(v[4]) - 1;
                 auto col = v[3][0];
-                auto color = v[2][0] ;
+                auto color = v[2][0];
                 auto id = std::stoi(v[0]);
 
                 if (v[1] == "Queen")
@@ -258,7 +300,7 @@ namespace chess
                 std::cout << piece->toString() << std::endl;
                 if (col >= 0 && col < 8 && row >= 0 && row < 8)
                 {
-                    BoardPositions &bp = ((*board)[col][row]);
+                    BoardPositions &bp = ((*board)[row][col]);
                     bp.piece = piece;
                 }
                 else

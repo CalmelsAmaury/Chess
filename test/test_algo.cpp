@@ -18,8 +18,21 @@ TEST(SampleTest, Example)
 
     auto save = c.save();
     EXPECT_TRUE(save);
-    ChessAlgorithm algo;
-    algo.nextMove(c);
+
+    auto board = c.CreateBoard();
+
+    // TEST du pion sans case en diagonal à manger :
+    auto pos = Position(1, 'a');
+    piece = Piece::getPiece(board, pos);
+    EXPECT_TRUE(piece != nullptr);
+
+    auto nextPos = piece->nextPossibleMoves(board);
+    EXPECT_TRUE(nextPos.size() == 1);
+    EXPECT_TRUE(nextPos[0].row_ == 2);
+    EXPECT_TRUE(nextPos[0].col_ == 0);
+
+    // ChessAlgorithm algo;
+    // algo.nextMove(c);
 
     /* Presentation pres;
      ClassAlgorithm algo;
