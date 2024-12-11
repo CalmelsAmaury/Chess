@@ -67,6 +67,16 @@ namespace chess
             return false;
         }
 
+        bool isEnemy(BoardPtr board, const Position &pos)
+        {
+            auto piece = (*board)[pos.row_][pos.col_].piece;
+            if(piece->color_ != color_)
+            {
+                return true;
+            }
+            return false;
+        }
+
         virtual std::vector<Position> nextPossibleMoves(BoardPtr board) { return {}; }
         Position position_;
         std::string name_;
@@ -120,11 +130,11 @@ namespace chess
             auto positionLeft = Position(position_.row_ + direction, position_.col_ - 1);
             auto positionRight = Position(position_.row_ + direction, position_.col_ + 1);
 
-            if(!isEmptyCell(board, positionLeft))
+            if(!isEmptyCell(board, positionLeft) && isEnemy(board, positionLeft))
             {
                 possiblePositions.push_back(positionLeft);
             }
-            if(!isEmptyCell(board, positionRight))
+            if(!isEmptyCell(board, positionRight) && isEnemy(board, positionLeft))
             {
                 possiblePositions.push_back(positionRight);
             }
