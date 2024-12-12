@@ -27,9 +27,30 @@ TEST(SampleTest, Example)
     EXPECT_TRUE(piece != nullptr);
 
     auto nextPos = piece->nextPossibleMoves(board);
-    EXPECT_TRUE(nextPos.size() == 1);
+    EXPECT_TRUE(nextPos.size() == 2);
     EXPECT_TRUE(nextPos[0].row_ == 2);
     EXPECT_TRUE(nextPos[0].col_ == 0);
+    
+    // TEST pion capture en diagonal :
+    auto pos1 = Position(1, 'g');
+    piece = Piece::getPiece(board, pos1);
+    EXPECT_TRUE(piece != nullptr);
+
+    auto nextPos1 = piece->nextPossibleMoves(board);
+    EXPECT_TRUE(nextPos1.size() == 3);
+    EXPECT_TRUE(nextPos1[2].row_ == 2);
+    EXPECT_TRUE(nextPos1[2].col_ == 7);
+
+    // TEST pion prise en passasnt :
+    auto pos2 = Position(4, 'e');
+    piece = Piece::getPiece(board, pos2);
+    EXPECT_TRUE(piece != nullptr);
+
+    auto nextPos2 = piece->nextPossibleMoves(board);
+    EXPECT_TRUE(nextPos2.size() == 2);
+    EXPECT_TRUE(nextPos2[1].row_ == 5);
+    EXPECT_TRUE(nextPos2[1].col_ == 3);
+
 
     // ChessAlgorithm algo;
     // algo.nextMove(c);

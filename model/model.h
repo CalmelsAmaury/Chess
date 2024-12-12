@@ -67,6 +67,14 @@ namespace chess
             return false;
         }
 
+        bool isPawn(BoardPtr board, const Position &pos)
+        {
+            auto piece = (*board)[pos.row_][pos.col_].piece;
+            if (piece->name_ == "Pawn")
+                return true;
+            return false;
+        }
+
         bool isEnemy(BoardPtr board, const Position &pos)
         {
             auto piece = (*board)[pos.row_][pos.col_].piece;
@@ -122,7 +130,7 @@ namespace chess
         {
             if(!isFirstMove) return;
             auto direction = getDirection();
-            if (color_ == Color::white && position_.row_ == 2 || color_ == Color::black && position_.row_ == 7)
+            if (color_ == Color::white && position_.row_ == 1 || color_ == Color::black && position_.row_ == 6)
             {
                 auto position = Position(position_.row_ + direction * 2, position_.col_);
                 if (isEmptyCell(board, position))
@@ -143,9 +151,31 @@ namespace chess
             {
                 possiblePositions.push_back(positionLeft);
             }
-            if(isInRange(board, positionLeft) && !isEmptyCell(board, positionRight) && isEnemy(board, positionLeft))
+            if(isInRange(board, positionRight) && !isEmptyCell(board, positionRight) && isEnemy(board, positionRight))
             {
                 possiblePositions.push_back(positionRight);
+            }
+        }
+
+        void rulePriseEnPassant(BoardPtr board, std::vector<Position> &possiblePositions)
+        {
+            auto direction = getDirection();
+            auto positionLeftDiagonal = Position(position_.row_ + direction, position_.col_ - 1);
+            auto positionRightDiagonal = Position(position_.row_ + direction, position_.col_ + 1);
+            auto positionLeft = Position(position_.row_, position_.col_ - 1);
+            auto positionRight = Position(position_.row_, position_.col_ + 1);
+
+            if (color_ == Color::white && position_.row_ == 4 || color_ == Color::black && position_.row_ == 3)
+            {
+                if(isInRange(board, positionLeftDiagonal) && isEmptyCell(board, positionLeftDiagonal) && !isEmptyCell(board, positionLeft) && isEnemy(board, positionLeft) && isPawn(board, positionLeft))
+                {
+                    possiblePositions.push_back(positionLeftDiagonal);
+                }
+                if(isInRange(board, positionRightDiagonal) && isEmptyCell(board, positionRightDiagonal) && !isEmptyCell(board, positionRight) && isEnemy(board, positionRight) && isPawn(board, positionLeft))
+                {
+                    possiblePositions.push_back(positionRightDiagonal);
+                }
+
             }
         }
 
@@ -156,6 +186,7 @@ namespace chess
             ruleMoveOnCases(board, positions);
             ruleMoveTwoCases(board, positions);
             ruleMoveDiagonal(board, positions);
+            rulePriseEnPassant(board, positions);
             return positions;
         }
     };
