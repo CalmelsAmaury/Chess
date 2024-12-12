@@ -12,7 +12,7 @@ class ChessAlgorithm{
             {   
                 BoardPositions& bpos = (*board)[row][col];
                 if(!bpos.piece) continue;
-               bpos.possiblePositions = bpos.piece->nextPossibleMoves(board);
+                std::vector<NextMove> possibleMoves = bpos.piece->nextPossibleMoves(board);
                 
             }
             return board;

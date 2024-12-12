@@ -37,11 +37,33 @@ namespace chess
     struct BoardPositions
     {
         PiecePtr piece;
-        std::vector<Position> possiblePositions;
+        std::vector<Position> nextMove;
     };
 
     using Board = std::array<std::array<BoardPositions, 8>, 8>;
     using BoardPtr = std::shared_ptr<Board>;
+
+    enum class Actions
+    {
+        toMove, 
+        toTake, 
+        toCheck, 
+        toPromote
+    };
+
+    struct Action
+    {
+        Action(const Actions &action, PiecePtr piece) : actions_(action), piece_(piece) {}
+        Actions actions_;
+        PiecePtr piece_;
+    };
+
+    struct NextMove
+    {
+        NextMove(Action &action, Position &position) : action_(action), position_(position) {}
+        Action action_;
+        Position position_;
+    };
 
     struct Piece
     {
@@ -94,114 +116,11 @@ namespace chess
             return false;
         }
 
-        virtual std::vector<Position> nextPossibleMoves(BoardPtr board) { return {}; }
+        virtual std::vector<NextMove> nextPossibleMoves(BoardPtr board) { return {}; }
         Position position_;
         std::string name_;
         Color color_;
         int id_;
-    };
-
-    struct Pawn : Piece
-    {
-        bool isFirstMove = true;
-        Pawn(int id, const Position &position, Color color) : Piece(id, "Pawn", position, color) {}
-
-        // avance de 1 dans la direction de la couleur
-        int getDirection()
-        {
-            int direction(color_ == Color::white ? +1 : -1);
-            return direction;
-        }
-
-        // Le pion se déplace droit devant lui (vers la 8e rangée pour les Blancs et vers la 1re rangée pour les Noirs),
-        // d'une seule case à chaque coup et sans jamais pouvoir reculer7.
-        void ruleMoveOnCases(BoardPtr board, std::vector<Position> &possiblePositions)
-        {
-            auto direction = getDirection();
-            auto position = Position(position_.row_ + direction, position_.col_);
-            if (isEmptyCell(board, position))
-            {
-                possiblePositions.push_back(position);
-            }
-        }
-
-        // Lors de son premier déplacement (alors qu'il est sur sa case initiale), un pion peut avancer de deux cases en un seul coup
-        void ruleMoveTwoCases(BoardPtr board, std::vector<Position> &possiblePositions)
-        {
-            if(!isFirstMove) return;
-            auto direction = getDirection();
-            if (color_ == Color::white && position_.row_ == 1 || color_ == Color::black && position_.row_ == 6)
-            {
-                auto position = Position(position_.row_ + direction * 2, position_.col_);
-                if (isEmptyCell(board, position))
-                {
-                    possiblePositions.push_back(position);
-                }
-            }
-        }
-
-        // Il ne peut capturer une pièce adverse que si elle se trouve à une case en diagonale de lui dans son sens de déplacement
-        void ruleMoveDiagonal(BoardPtr board, std::vector<Position> &possiblePositions)
-        {
-            auto direction = getDirection();
-            auto positionLeft = Position(position_.row_ + direction, position_.col_ - 1);
-            auto positionRight = Position(position_.row_ + direction, position_.col_ + 1);
-            
-            if(isInRange(board, positionLeft) && !isEmptyCell(board, positionLeft) && isEnemy(board, positionLeft))
-            {
-                possiblePositions.push_back(positionLeft);
-            }
-            if(isInRange(board, positionRight) && !isEmptyCell(board, positionRight) && isEnemy(board, positionRight))
-            {
-                possiblePositions.push_back(positionRight);
-            }
-        }
-
-        // ce dernier a la possibilité de prendre comme si le coup de début n'avait été que d'une case. Cette prise en passant ne peut se faire qu'en réponse immédiate à l'avance double
-        void rulePriseEnPassant(BoardPtr board, std::vector<Position> &possiblePositions)
-        {
-            auto direction = getDirection();
-            auto positionLeftDiagonal = Position(position_.row_ + direction, position_.col_ - 1);
-            auto positionRightDiagonal = Position(position_.row_ + direction, position_.col_ + 1);
-            auto positionLeft = Position(position_.row_, position_.col_ - 1);
-            auto positionRight = Position(position_.row_, position_.col_ + 1);
-
-            if (color_ == Color::white && position_.row_ == 4 || color_ == Color::black && position_.row_ == 3)
-            {
-                if(isInRange(board, positionLeftDiagonal) && isEmptyCell(board, positionLeftDiagonal) && !isEmptyCell(board, positionLeft) && isEnemy(board, positionLeft) && isPawn(board, positionLeft))
-                {
-                    possiblePositions.push_back(positionLeftDiagonal);
-                }
-                if(isInRange(board, positionRightDiagonal) && isEmptyCell(board, positionRightDiagonal) && !isEmptyCell(board, positionRight) && isEnemy(board, positionRight) && isPawn(board, positionLeft))
-                {
-                    possiblePositions.push_back(positionRightDiagonal);
-                }
-
-            }
-        }
-
-        // Quand le pion arrive sur la dernière rangée, il doit se transformer en une pièce de son camp de valeur supérieure, au choix du joueur : dame, tour, fou ou cavalier.
-        void rulePromote(BoardPtr board)
-        {
-            if(color_ == Color::white && position_.row_ == 7 || color_ == Color::black && position_.row_ == 0)
-            {
-                // Ne marche pas
-                // auto promotedPiece = std::make_shared<Queen>(id_, position_, color_);
-                // (*board)[position_.row_][position_.col_].piece = promotedPiece;
-            }
-        }
-
-        // calcule la liste des possibles positions de la pièce
-        std::vector<Position> nextPossibleMoves(BoardPtr board) override
-        {
-            std::vector<Position> positions;
-            ruleMoveOnCases(board, positions);
-            ruleMoveTwoCases(board, positions);
-            ruleMoveDiagonal(board, positions);
-            rulePriseEnPassant(board, positions);
-            rulePromote(board);
-            return positions;
-        }
     };
 
     struct Rook : Piece
@@ -227,6 +146,113 @@ namespace chess
     struct Knight : Piece
     {
         Knight(int id, const Position &position, Color color) : Piece(id, "Knight", position, color) {}
+    };
+
+    struct Pawn : Piece
+    {
+        bool isFirstMove = true;
+        Pawn(int id, const Position &position, Color color) : Piece(id, "Pawn", position, color) {}
+
+        // avance de 1 dans la direction de la couleur
+        int getDirection()
+        {
+            int direction(color_ == Color::white ? +1 : -1);
+            return direction;
+        }
+
+        // Le pion se déplace droit devant lui (vers la 8e rangée pour les Blancs et vers la 1re rangée pour les Noirs),
+        // d'une seule case à chaque coup et sans jamais pouvoir reculer7.
+        void ruleMoveOnCases(BoardPtr board, std::vector<NextMove> &nextMove)
+        {
+            auto direction = getDirection();
+            auto position = Position(position_.row_ + direction, position_.col_);
+            auto action = Action(Actions::toMove, nullptr);
+            if (isInRange(board, position) &&isEmptyCell(board, position))
+            {
+                nextMove.push_back(NextMove(action, position));
+            }
+        }
+
+        // Lors de son premier déplacement (alors qu'il est sur sa case initiale), un pion peut avancer de deux cases en un seul coup
+        void ruleMoveTwoCases(BoardPtr board, std::vector<NextMove> &nextMove)
+        {
+            if(!isFirstMove) return;
+            auto direction = getDirection();
+            auto action = Action(Actions::toMove, nullptr);
+            if (color_ == Color::white && position_.row_ == 1 || color_ == Color::black && position_.row_ == 6)
+            {
+                auto position = Position(position_.row_ + direction * 2, position_.col_);
+                if (isInRange(board, position) && isEmptyCell(board, position))
+                {
+                    nextMove.push_back(NextMove(action, position));
+                }
+            }
+        }
+
+        // Il ne peut capturer une pièce adverse que si elle se trouve à une case en diagonale de lui dans son sens de déplacement
+        void ruleMoveDiagonal(BoardPtr board, std::vector<NextMove> &nextMove)
+        {
+            auto direction = getDirection();
+            auto positionLeft = Position(position_.row_ + direction, position_.col_ - 1);
+            auto positionRight = Position(position_.row_ + direction, position_.col_ + 1);
+            auto action = Action(Actions::toTake, nullptr);
+            
+            if(isInRange(board, positionLeft) && !isEmptyCell(board, positionLeft) && isEnemy(board, positionLeft))
+            {
+                nextMove.push_back(NextMove(action, positionLeft));
+            }
+            if(isInRange(board, positionRight) && !isEmptyCell(board, positionRight) && isEnemy(board, positionRight))
+            {
+                nextMove.push_back(NextMove(action, positionRight));
+            }
+        }
+
+        // ce dernier a la possibilité de prendre comme si le coup de début n'avait été que d'une case. Cette prise en passant ne peut se faire qu'en réponse immédiate à l'avance double
+        void rulePriseEnPassant(BoardPtr board, std::vector<NextMove> &nextMove)
+        {
+            auto direction = getDirection();
+            auto positionLeftDiagonal = Position(position_.row_ + direction, position_.col_ - 1);
+            auto positionRightDiagonal = Position(position_.row_ + direction, position_.col_ + 1);
+            auto positionLeft = Position(position_.row_, position_.col_ - 1);
+            auto positionRight = Position(position_.row_, position_.col_ + 1);
+            auto action = Action(Actions::toMove, nullptr);
+
+            if (color_ == Color::white && position_.row_ == 4 || color_ == Color::black && position_.row_ == 3)
+            {
+                if(isInRange(board, positionLeftDiagonal) && isEmptyCell(board, positionLeftDiagonal) && !isEmptyCell(board, positionLeft) && isEnemy(board, positionLeft) && isPawn(board, positionLeft))
+                {
+                    nextMove.push_back(NextMove(action, positionLeftDiagonal));
+                }
+                if(isInRange(board, positionRightDiagonal) && isEmptyCell(board, positionRightDiagonal) && !isEmptyCell(board, positionRight) && isEnemy(board, positionRight) && isPawn(board, positionLeft))
+                {
+                    nextMove.push_back(NextMove(action, positionRightDiagonal));
+                }
+
+            }
+        }
+
+        // Quand le pion arrive sur la dernière rangée, il doit se transformer en une pièce de son camp de valeur supérieure, au choix du joueur : dame, tour, fou ou cavalier.
+        void rulePromote(BoardPtr board, std::vector<NextMove> &nextMove)
+        {
+            auto action = Action(Actions::toPromote, nullptr);
+            if(color_ == Color::white && position_.row_ == 7 || color_ == Color::black && position_.row_ == 0)
+            {
+                auto promotedPiece = std::make_shared<Queen>(id_, position_, color_);
+                (*board)[position_.row_][position_.col_].piece = promotedPiece;
+            }
+        }
+
+        // calcule la liste des possibles positions de la pièce
+        std::vector<NextMove> nextPossibleMoves(BoardPtr board) override
+        {
+            std::vector<NextMove> nextMove;
+            ruleMoveOnCases(board, nextMove);
+            ruleMoveTwoCases(board, nextMove);
+            ruleMoveDiagonal(board, nextMove);
+            rulePriseEnPassant(board, nextMove);
+            rulePromote(board, nextMove);
+            return nextMove;
+        }
     };
 
     /**
