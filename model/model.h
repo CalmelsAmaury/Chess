@@ -157,6 +157,7 @@ namespace chess
             }
         }
 
+        // ce dernier a la possibilité de prendre comme si le coup de début n'avait été que d'une case. Cette prise en passant ne peut se faire qu'en réponse immédiate à l'avance double
         void rulePriseEnPassant(BoardPtr board, std::vector<Position> &possiblePositions)
         {
             auto direction = getDirection();
@@ -179,6 +180,17 @@ namespace chess
             }
         }
 
+        // Quand le pion arrive sur la dernière rangée, il doit se transformer en une pièce de son camp de valeur supérieure, au choix du joueur : dame, tour, fou ou cavalier.
+        void rulePromote(BoardPtr board)
+        {
+            if(color_ == Color::white && position_.row_ == 7 || color_ == Color::black && position_.row_ == 0)
+            {
+                // Ne marche pas
+                // auto promotedPiece = std::make_shared<Queen>(id_, position_, color_);
+                // (*board)[position_.row_][position_.col_].piece = promotedPiece;
+            }
+        }
+
         // calcule la liste des possibles positions de la pièce
         std::vector<Position> nextPossibleMoves(BoardPtr board) override
         {
@@ -187,6 +199,7 @@ namespace chess
             ruleMoveTwoCases(board, positions);
             ruleMoveDiagonal(board, positions);
             rulePriseEnPassant(board, positions);
+            rulePromote(board);
             return positions;
         }
     };

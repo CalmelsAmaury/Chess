@@ -21,7 +21,7 @@ TEST(SampleTest, Example)
 
     auto board = c.CreateBoard();
 
-    // TEST du pion sans case en diagonal à manger :
+    // TEST du pion sans case en diagonale à manger :
     auto pos = Position(1, 'a');
     piece = Piece::getPiece(board, pos);
     EXPECT_TRUE(piece != nullptr);
@@ -31,7 +31,7 @@ TEST(SampleTest, Example)
     EXPECT_TRUE(nextPos[0].row_ == 2);
     EXPECT_TRUE(nextPos[0].col_ == 0);
     
-    // TEST pion capture en diagonal :
+    // TEST pion capture en diagonale :
     auto pos1 = Position(1, 'g');
     piece = Piece::getPiece(board, pos1);
     EXPECT_TRUE(piece != nullptr);
@@ -41,7 +41,7 @@ TEST(SampleTest, Example)
     EXPECT_TRUE(nextPos1[2].row_ == 2);
     EXPECT_TRUE(nextPos1[2].col_ == 7);
 
-    // TEST pion prise en passasnt :
+    // TEST pion prise en passant :
     auto pos2 = Position(4, 'e');
     piece = Piece::getPiece(board, pos2);
     EXPECT_TRUE(piece != nullptr);
@@ -51,6 +51,14 @@ TEST(SampleTest, Example)
     EXPECT_TRUE(nextPos2[1].row_ == 5);
     EXPECT_TRUE(nextPos2[1].col_ == 3);
 
+    // TEST promotion pion
+    auto pos3 = Position(7, 'b');
+    piece = Piece::getPiece(board, pos3);
+    EXPECT_TRUE(piece != nullptr);
+    EXPECT_TRUE(piece->name_ == "Pawn");
+    // auto nextPos3 = piece->nextPossibleMoves(board);
+    // EXPECT_TRUE(nextPos3.size() == 1);
+    // EXPECT_TRUE(piece->name_ == "Queen");
 
     // ChessAlgorithm algo;
     // algo.nextMove(c);
