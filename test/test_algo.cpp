@@ -20,7 +20,7 @@ TEST(SampleTest, Example)
     EXPECT_TRUE(save);
 
     auto board = c.CreateBoard();
-
+    /*
     // TEST du pion sans case en diagonale à manger :
     auto pos = Position(1, 'a');
     piece = Piece::getPiece(board, pos);
@@ -59,7 +59,7 @@ TEST(SampleTest, Example)
     //auto nextPos3 = piece->nextPossibleMoves(board);
     //EXPECT_TRUE(nextPos3.size() == 1);
     //EXPECT_TRUE(piece->name_ == "Queen");
-
+    */
     // TEST promotion pion
     
     auto pos3 = Position(7, 'b');

@@ -219,11 +219,11 @@ namespace chess
 
             if (color_ == Color::white && position_.row_ == 4 || color_ == Color::black && position_.row_ == 3)
             {
-                if(isInRange(board, positionLeftDiagonal) && isEmptyCell(board, positionLeftDiagonal) && !isEmptyCell(board, positionLeft) && isEnemy(board, positionLeft) && isPawn(board, positionLeft))
+                if(isInRange(board, positionLeftDiagonal) && isInRange(board, positionLeft) && isEmptyCell(board, positionLeftDiagonal) && !isEmptyCell(board, positionLeft) && isEnemy(board, positionLeft) && isPawn(board, positionLeft))
                 {
                     nextMove.push_back(NextMove(action, positionLeftDiagonal));
                 }
-                if(isInRange(board, positionRightDiagonal) && isEmptyCell(board, positionRightDiagonal) && !isEmptyCell(board, positionRight) && isEnemy(board, positionRight) && isPawn(board, positionLeft))
+                if(isInRange(board, positionRightDiagonal) && isInRange(board, positionRight) && isEmptyCell(board, positionRightDiagonal) && !isEmptyCell(board, positionRight) && isEnemy(board, positionRight) && isPawn(board, positionLeft))
                 {
                     nextMove.push_back(NextMove(action, positionRightDiagonal));
                 }
@@ -238,6 +238,7 @@ namespace chess
             if(color_ == Color::white && position_.row_ == 7 || color_ == Color::black && position_.row_ == 0)
             {
                 auto promotedPiece = std::make_shared<Queen>(id_, position_, color_);
+                nextMove.push_back(NextMove(action, position_));
                 (*board)[position_.row_][position_.col_].piece = promotedPiece;
             }
         }
