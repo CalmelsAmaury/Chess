@@ -65,8 +65,9 @@ TEST(SampleTest, Example)
     auto pos3 = Position(7, 'b');
 
     piece = Piece::getPiece(board, pos3);
-
+    EXPECT_TRUE(piece != nullptr);
     auto nextMoves = piece->nextPossibleMoves(board);
+    EXPECT_TRUE(nextMoves.size() == 1);
     EXPECT_TRUE(nextMoves[0].action_.actions_ == Actions::toPromote && nextMoves[0].action_.piece_->name_ == "Queen") ;
 
     // ChessAlgorithm algo;

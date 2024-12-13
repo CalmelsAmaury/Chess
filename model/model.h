@@ -234,10 +234,10 @@ namespace chess
         // Quand le pion arrive sur la dernière rangée, il doit se transformer en une pièce de son camp de valeur supérieure, au choix du joueur : dame, tour, fou ou cavalier.
         void rulePromote(BoardPtr board, std::vector<NextMove> &nextMove)
         {
-            auto action = Action(Actions::toPromote, nullptr);
+            auto promotedPiece = std::make_shared<Queen>(id_, position_, color_);
+            auto action = Action(Actions::toPromote, promotedPiece);
             if(color_ == Color::white && position_.row_ == 7 || color_ == Color::black && position_.row_ == 0)
             {
-                auto promotedPiece = std::make_shared<Queen>(id_, position_, color_);
                 nextMove.push_back(NextMove(action, position_));
                 (*board)[position_.row_][position_.col_].piece = promotedPiece;
             }
