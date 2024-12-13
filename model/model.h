@@ -215,7 +215,7 @@ namespace chess
             auto positionRightDiagonal = Position(position_.row_ + direction, position_.col_ + 1);
             auto positionLeft = Position(position_.row_, position_.col_ - 1);
             auto positionRight = Position(position_.row_, position_.col_ + 1);
-            auto action = Action(Actions::toMove, nullptr);
+            auto action = Action(Actions::toTake, nullptr);
 
             if (color_ == Color::white && position_.row_ == 4 || color_ == Color::black && position_.row_ == 3)
             {
@@ -239,7 +239,6 @@ namespace chess
             if(color_ == Color::white && position_.row_ == 7 || color_ == Color::black && position_.row_ == 0)
             {
                 nextMove.push_back(NextMove(action, position_));
-                (*board)[position_.row_][position_.col_].piece = promotedPiece;
             }
         }
 
