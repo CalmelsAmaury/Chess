@@ -17,6 +17,19 @@ class ChessAlgorithm{
             }
             return board;
         }
- 
+
+        auto bestMove(NextMove nextMove)
+        {   
+            std::vector<NextMove> bestMove;
+            if(nextMove.action_.actions_ == Actions::toTake)
+            {
+                bestMove.push_back(nextMove);
+            }
+            else if(nextMove.action_.actions_ != Actions::toTake)
+            {
+                bestMove.push_back(nextMove);
+            }
+            return bestMove;
+        }
 };
 }
