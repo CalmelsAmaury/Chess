@@ -16,9 +16,29 @@ TEST(Pion, ThePawnMovesStraight)
     EXPECT_TRUE(piece != nullptr);
 
     auto nextPos = piece->nextPossibleMoves(board);
-    EXPECT_TRUE(nextPos.size() == 2);
+    EXPECT_TRUE(nextPos.size() == 3);
     EXPECT_TRUE(nextPos[0].position_.row_ == 2);
     EXPECT_TRUE(nextPos[0].position_.col_ == 0);
+  
+}
+
+TEST(Pion, BestMoveDiagonalCaptureDown2)
+{
+    Model c;
+    auto loaded = c.load("Chess.cfg");
+    EXPECT_TRUE(loaded);
+    auto board = c.CreateBoard();
+ 
+    auto pos = Position(1, 'a');
+    auto piece = Piece::getPiece(board, pos);
+    EXPECT_TRUE(piece != nullptr);
+
+    auto nextPos = piece->nextPossibleMoves(board);
+    NextMove best = piece->bestMove(nextPos);
+    EXPECT_TRUE(best.action_.piece_ != nullptr);
+    EXPECT_TRUE(best.action_.piece_->name_ == "Pawn");
+    EXPECT_TRUE(best.position_.row_ == 2);
+    EXPECT_TRUE(best.position_.col_ == 1);
   
 }
 

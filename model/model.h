@@ -26,6 +26,10 @@ namespace chess
         {
         }
 
+        explicit Position() : row_(-1), col_(-1)
+        {
+        }
+
         int row_;
         int col_;
     };
@@ -45,7 +49,9 @@ namespace chess
 
     enum class Actions
     {
-        toMove, 
+        none,
+        toMove,
+        toMoveTwo, 
         toTake, 
         toCheck, 
         toPromote
@@ -61,6 +67,7 @@ namespace chess
     struct NextMove
     {
         NextMove(Action &action, Position &position) : action_(action), position_(position) {}
+        NextMove() : action_(Actions::none, nullptr) {}
         Action action_;
         Position position_;
     };
@@ -116,6 +123,7 @@ namespace chess
             return false;
         }
 
+        virtual NextMove bestMove(std::vector<NextMove> &nextPositions) { return NextMove(); }
         virtual std::vector<NextMove> nextPossibleMoves(BoardPtr board) { return {}; }
         Position position_;
         std::string name_;
@@ -153,6 +161,51 @@ namespace chess
         bool isFirstMove = true;
         Pawn(int id, const Position &position, Color color) : Piece(id, "Pawn", position, color) {}
 
+        // calcule la liste des possibles positions de la pièce
+        std::vector<NextMove> nextPossibleMoves(BoardPtr board) override
+        {
+            std::vector<NextMove> nextMove;
+            ruleMoveOnCases(board, nextMove);
+            ruleMoveTwoCases(board, nextMove);
+            ruleMoveDiagonal(board, nextMove);
+            rulePriseEnPassant(board, nextMove);
+            rulePromote(board, nextMove);
+            return nextMove;
+        }
+
+        int getWeight(Actions action)
+        {
+            switch (action)
+                {
+                case Actions::none: return -1;
+                case Actions::toMove: return 0;
+                case Actions::toMoveTwo: return 1;
+                case Actions::toCheck: return 2;
+                case Actions::toTake: return 2;
+                case Actions::toPromote: return 3;
+                }
+                return -1;
+        }
+
+        
+        NextMove bestMove(std::vector<NextMove> &nextPositions) override
+        {
+            int weight = 0;
+            int index = 0;
+            int i = 0;
+            for(auto & move : nextPositions)
+            {
+                int v = getWeight(move.action_.actions_);
+                if(v > weight)
+                {
+                    index = i;
+                    weight = v;
+                }
+                i++;
+            }
+            return nextPositions[index];
+        }
+
         // avance de 1 dans la direction de la couleur
         int getDirection()
         {
@@ -167,7 +220,7 @@ namespace chess
             auto direction = getDirection();
             auto position = Position(position_.row_ + direction, position_.col_);
             auto action = Action(Actions::toMove, nullptr);
-            if (isInRange(board, position) &&isEmptyCell(board, position))
+            if (isInRange(board, position) && isEmptyCell(board, position))
             {
                 nextMove.push_back(NextMove(action, position));
             }
@@ -178,7 +231,7 @@ namespace chess
         {
             if(!isFirstMove) return;
             auto direction = getDirection();
-            auto action = Action(Actions::toMove, nullptr);
+            auto action = Action(Actions::toMoveTwo, nullptr);
             if (color_ == Color::white && position_.row_ == 1 || color_ == Color::black && position_.row_ == 6)
             {
                 auto position = Position(position_.row_ + direction * 2, position_.col_);
@@ -199,10 +252,12 @@ namespace chess
             
             if(isInRange(board, positionLeft) && !isEmptyCell(board, positionLeft) && isEnemy(board, positionLeft))
             {
+                action.piece_ = getPiece(board, positionLeft);
                 nextMove.push_back(NextMove(action, positionLeft));
             }
             if(isInRange(board, positionRight) && !isEmptyCell(board, positionRight) && isEnemy(board, positionRight))
             {
+                action.piece_ = getPiece(board, positionRight);
                 nextMove.push_back(NextMove(action, positionRight));
             }
         }
@@ -242,17 +297,7 @@ namespace chess
             }
         }
 
-        // calcule la liste des possibles positions de la pièce
-        std::vector<NextMove> nextPossibleMoves(BoardPtr board) override
-        {
-            std::vector<NextMove> nextMove;
-            ruleMoveOnCases(board, nextMove);
-            ruleMoveTwoCases(board, nextMove);
-            ruleMoveDiagonal(board, nextMove);
-            rulePriseEnPassant(board, nextMove);
-            rulePromote(board, nextMove);
-            return nextMove;
-        }
+        
     };
 
     /**
