@@ -56,7 +56,22 @@ Attendre la validation de cette étape. VALIDE LE 2/12/2024
   M2. pour chaque chapitre, écrire le titre des sections signifiantes\
   M3. pour chaque section écrire le pseudo code\
   
+ 
+
+# 6 - Ecrire le nextPossibleMoves et le bestMove (ainsi que les tests unitaires correspondant) pour chaque piece de l'échiquier : 
+
+6.1 Roi (1 pièce) 
+6.2 Dame ou Reine (1 pièce)
+6.3 Tours (2 pièces) 
+6.4 Fous (2 pièces)  
+6.5 Cavaliers (2 pièces)
+6.7 Pions (8 pièces) 
+
+  
 Attendre la validation de cette étape.  
+
+
+
 
 # 6 - exercice d'explication oral à Fabrice & Marylise du code (à la Feynman)
 
