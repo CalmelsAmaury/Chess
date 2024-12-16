@@ -70,6 +70,7 @@ namespace chess
         NextMove() : action_(Actions::none, nullptr) {}
         Action action_;
         Position position_;
+        int weight_{0};
     };
 
     struct Piece
@@ -203,6 +204,7 @@ namespace chess
                 }
                 i++;
             }
+            nextPositions[index].weight_ = weight;
             return nextPositions[index];
         }
 
