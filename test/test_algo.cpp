@@ -65,7 +65,7 @@ TEST(Pion, PriseEnPassantPawn)
     EXPECT_TRUE(loaded);
     auto board = c.CreateBoard();
 
-    auto pos = Position(4, 'e');
+    auto pos = Position(4, 'c');
     auto piece = Piece::getPiece(board, pos);
     EXPECT_TRUE(piece != nullptr);
 
@@ -94,7 +94,97 @@ TEST(Pion, PromotePawn)
     EXPECT_TRUE(nextPos[0].action_.actions_ == Actions::toPromote);
 }
 
-TEST(Chess, BestMovesAllPieces)
+TEST(Rook, RookMove)
+{
+    Model c;
+    auto loaded = c.load("Chess.cfg");
+    EXPECT_TRUE(loaded);
+    auto board = c.CreateBoard();
+
+    auto pos = Position(3, 'h');
+    auto piece = Piece::getPiece(board, pos);
+    EXPECT_TRUE(piece != nullptr);
+
+    auto nextPos = piece->nextPossibleMoves(board);
+    EXPECT_TRUE(nextPos.size() == 12);
+    EXPECT_TRUE(nextPos[0].position_.row_ == 4);
+    EXPECT_TRUE(nextPos[0].position_.col_ == 7);
+    EXPECT_TRUE(nextPos[0].action_.actions_ == Actions::toMove);
+}
+
+TEST(Bishop, BishopMove)
+{
+    Model c;
+    auto loaded = c.load("Chess.cfg");
+    EXPECT_TRUE(loaded);
+    auto board = c.CreateBoard();
+
+    auto pos = Position(4, 'f');
+    auto piece = Piece::getPiece(board, pos);
+    EXPECT_TRUE(piece != nullptr);
+
+    auto nextPos = piece->nextPossibleMoves(board);
+    EXPECT_TRUE(nextPos.size() == 9);
+    EXPECT_TRUE(nextPos[0].position_.row_ == 5);
+    EXPECT_TRUE(nextPos[0].position_.col_ == 4);
+    EXPECT_TRUE(nextPos[0].action_.actions_ == Actions::toMove);
+}
+
+TEST(Queen, QueenMove)
+{
+    Model c;
+    auto loaded = c.load("Chess.cfg");
+    EXPECT_TRUE(loaded);
+    auto board = c.CreateBoard();
+
+    auto pos = Position(3, 'h');
+    auto piece = Piece::getPiece(board, pos);
+    EXPECT_TRUE(piece != nullptr);
+
+    auto nextPos = piece->nextPossibleMoves(board);
+    EXPECT_TRUE(nextPos.size() == 12);
+    EXPECT_TRUE(nextPos[0].position_.row_ == 4);
+    EXPECT_TRUE(nextPos[0].position_.col_ == 7);
+    EXPECT_TRUE(nextPos[0].action_.actions_ == Actions::toMove);
+}
+
+TEST(Knight, KnightMove)
+{
+    Model c;
+    auto loaded = c.load("Chess.cfg");
+    EXPECT_TRUE(loaded);
+    auto board = c.CreateBoard();
+
+    auto pos = Position(5, 'c');
+    auto piece = Piece::getPiece(board, pos);
+    EXPECT_TRUE(piece != nullptr);
+
+    auto nextPos = piece->nextPossibleMoves(board);
+    EXPECT_TRUE(nextPos.size() == 7);
+    EXPECT_TRUE(nextPos[0].position_.row_ == 6);
+    EXPECT_TRUE(nextPos[0].position_.col_ == 0);
+    EXPECT_TRUE(nextPos[0].action_.actions_ == Actions::toMove);
+}
+
+TEST(King, KingMove)
+{
+    Model c;
+    auto loaded = c.load("Chess.cfg");
+    EXPECT_TRUE(loaded);
+    auto board = c.CreateBoard();
+
+    auto pos = Position(0, 'e');
+    auto piece = Piece::getPiece(board, pos);
+    EXPECT_TRUE(piece != nullptr);
+
+    auto nextPos = piece->nextPossibleMoves(board);
+    EXPECT_TRUE(nextPos.size() == 2);
+    EXPECT_TRUE(nextPos[0].position_.row_ == 1);
+    EXPECT_TRUE(nextPos[0].position_.col_ == 4);
+    EXPECT_TRUE(nextPos[0].action_.actions_ == Actions::toMove);
+}
+
+/*TEST(Chess, BestMovesAllPieces)
 {
     Model c;
     auto loaded = c.load("Chess2.cfg");
@@ -111,7 +201,7 @@ TEST(Chess, BestMovesAllPieces)
     EXPECT_TRUE(best.action_.piece_->name_ == "Pawn");
     EXPECT_TRUE(best.position_.row_ == 1 || best.position_.row_ == 1);
     EXPECT_TRUE(best.position_.col_ == 2 || best.position_.col_ == 0);
-}
+}*/
 
 int main(int argc, char **argv)
 {

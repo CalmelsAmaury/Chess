@@ -73,6 +73,12 @@ namespace chess
         int weight_{0};
     };
 
+    struct Direction
+    {
+        int row_;
+        int col_;
+    };
+
     struct Piece
     {
         Piece(int id, const std::string &pieceName, const Position &piecePosition, const Color &color) : id_(id), name_(pieceName), position_(piecePosition), color_(color) {}
@@ -135,26 +141,392 @@ namespace chess
     struct Rook : Piece
     {
         Rook(int id, const Position &position, Color color) : Piece(id, "Rook", position, color) {}
+
+        std::vector<NextMove> nextPossibleMoves(BoardPtr board) override
+        {
+            std::vector<NextMove> nextMove;
+            ruleMoveOnCases(board, nextMove);
+            return nextMove;
+
+        }
+
+        int getWeight(Actions action)
+        {
+            switch (action)
+                {
+                case Actions::none: return -1;
+                case Actions::toMove: return 0;
+                case Actions::toMoveTwo: return -1;
+                case Actions::toCheck: return 2;
+                case Actions::toTake: return 2;
+                case Actions::toPromote: return -1;
+                }
+                return -1;
+        }
+
+        NextMove bestMove(std::vector<NextMove> &nextPositions) override
+        {
+            int weight = 0;
+            int index = 0;
+            int i = 0;
+            for(auto & move : nextPositions)
+            {
+                int v = getWeight(move.action_.actions_);
+                if(v > weight)
+                {
+                    index = i;
+                    weight = v;
+                }
+                i++;
+            }
+            nextPositions[index].weight_ = weight;
+            return nextPositions[index];
+        }
+
+        auto getDirections()
+        {
+            std::vector<Direction> directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+            return directions;
+        }
+
+        void ruleMoveOnCases(BoardPtr board, std::vector<NextMove> &nextMove)
+        {
+            auto directions = getDirections();
+            auto action = Action(Actions::toMove, nullptr);
+            
+            for(auto direction : directions)
+            {
+                Position targetPosition(position_.row_ + direction.row_, position_.col_ + direction.col_);
+                while(true)
+                {
+                    if(isInRange(board, targetPosition) && isEmptyCell(board, targetPosition))
+                    {
+                        nextMove.push_back(NextMove(action, targetPosition));
+                        targetPosition = Position(targetPosition.row_ + direction.row_, targetPosition.col_ + direction.col_);
+                    }
+
+                    else if(isInRange(board, targetPosition) && !isEmptyCell(board, targetPosition) && isEnemy(board, targetPosition))
+                    {
+                        action = Action(Actions::toTake, getPiece(board, targetPosition));
+                        nextMove.push_back(NextMove(action, targetPosition));
+                        break;
+                    }
+                    else break;
+                }
+            }
+        }
     };
 
     struct Bishop : Piece
     {
         Bishop(int id, const Position &position, Color color) : Piece(id, "Bishop", position, color) {}
+        std::vector<NextMove> nextPossibleMoves(BoardPtr board) override
+        {
+            std::vector<NextMove> nextMove;
+            ruleMoveOnCases(board, nextMove);
+            return nextMove;
+
+        }
+
+        int getWeight(Actions action)
+        {
+            switch (action)
+                {
+                case Actions::none: return -1;
+                case Actions::toMove: return 0;
+                case Actions::toMoveTwo: return -1;
+                case Actions::toCheck: return 2;
+                case Actions::toTake: return 2;
+                case Actions::toPromote: return -1;
+                }
+                return -1;
+        }
+
+        NextMove bestMove(std::vector<NextMove> &nextPositions) override
+        {
+            int weight = 0;
+            int index = 0;
+            int i = 0;
+            for(auto & move : nextPositions)
+            {
+                int v = getWeight(move.action_.actions_);
+                if(v > weight)
+                {
+                    index = i;
+                    weight = v;
+                }
+                i++;
+            }
+            nextPositions[index].weight_ = weight;
+            return nextPositions[index];
+        }
+        
+        auto getDirections()
+        {
+            std::vector<Direction> directions = {{1, -1}, {1, 1}, {-1, 1}, {-1, -1}};
+            return directions;
+        }
+
+        void ruleMoveOnCases(BoardPtr board, std::vector<NextMove> &nextMove)
+        {
+            auto directions = getDirections();
+            auto action = Action(Actions::toMove, nullptr);
+            
+            for(auto direction : directions)
+            {
+                Position targetPosition(position_.row_ + direction.row_, position_.col_ + direction.col_);
+                while(true)
+                {
+                    if(isInRange(board, targetPosition) && isEmptyCell(board, targetPosition))
+                    {
+                        nextMove.push_back(NextMove(action, targetPosition));
+                        targetPosition = Position(targetPosition.row_ + direction.row_, targetPosition.col_ + direction.col_);
+                    }
+
+                    else if(isInRange(board, targetPosition) && !isEmptyCell(board, targetPosition) && isEnemy(board, targetPosition))
+                    {
+                        action = Action(Actions::toTake, getPiece(board, targetPosition));
+                        nextMove.push_back(NextMove(action, targetPosition));
+                        break;
+                    }
+                    else break;
+                }
+            }
+        }
     };
 
     struct King : Piece
     {
         King(int id, const Position &position, Color color) : Piece(id, "King", position, color) {}
+        std::vector<NextMove> nextPossibleMoves(BoardPtr board) override
+        {
+            std::vector<NextMove> nextMove;
+            ruleMoveOnCases(board, nextMove);
+            return nextMove;
+
+        }
+
+        int getWeight(Actions action)
+        {
+            switch (action)
+                {
+                case Actions::none: return -1;
+                case Actions::toMove: return 0;
+                case Actions::toMoveTwo: return -1;
+                case Actions::toCheck: return 2;
+                case Actions::toTake: return 2;
+                case Actions::toPromote: return -1;
+                }
+                return -1;
+        }
+
+        NextMove bestMove(std::vector<NextMove> &nextPositions) override
+        {
+            int weight = 0;
+            int index = 0;
+            int i = 0;
+            for(auto & move : nextPositions)
+            {
+                int v = getWeight(move.action_.actions_);
+                if(v > weight)
+                {
+                    index = i;
+                    weight = v;
+                }
+                i++;
+            }
+            nextPositions[index].weight_ = weight;
+            return nextPositions[index];
+        }
+
+        auto getDirections()
+        {
+            std::vector<Direction> directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1},{1, -1}, {1, 1}, {-1, 1}, {-1, -1}};
+            return directions;
+        }
+
+        void ruleMoveOnCases(BoardPtr board, std::vector<NextMove> &nextMove)
+        {
+            auto directions = getDirections();
+            auto action = Action(Actions::toMove, nullptr);
+            
+            for(auto direction : directions)
+            {
+                Position targetPosition(position_.row_ + direction.row_, position_.col_ + direction.col_);
+                while(true)
+                {
+                    if(isInRange(board, targetPosition) && isEmptyCell(board, targetPosition))
+                    {
+                        nextMove.push_back(NextMove(action, targetPosition));
+                        break;
+                    }
+
+                    else if(isInRange(board, targetPosition) && !isEmptyCell(board, targetPosition) && isEnemy(board, targetPosition))
+                    {
+                        action = Action(Actions::toTake, getPiece(board, targetPosition));
+                        nextMove.push_back(NextMove(action, targetPosition));
+                        break;
+                    }
+                    else break;
+                }
+            }
+        }
     };
 
     struct Queen : Piece
     {
         Queen(int id, const Position &position, Color color) : Piece(id, "Queen", position, color) {}
+        std::vector<NextMove> nextPossibleMoves(BoardPtr board) override
+        {
+            std::vector<NextMove> nextMove;
+            ruleMoveOnCases(board, nextMove);
+            return nextMove;
+
+        }
+
+        int getWeight(Actions action)
+        {
+            switch (action)
+                {
+                case Actions::none: return -1;
+                case Actions::toMove: return 0;
+                case Actions::toMoveTwo: return -1;
+                case Actions::toCheck: return 2;
+                case Actions::toTake: return 2;
+                case Actions::toPromote: return -1;
+                }
+                return -1;
+        }
+
+        NextMove bestMove(std::vector<NextMove> &nextPositions) override
+        {
+            int weight = 0;
+            int index = 0;
+            int i = 0;
+            for(auto & move : nextPositions)
+            {
+                int v = getWeight(move.action_.actions_);
+                if(v > weight)
+                {
+                    index = i;
+                    weight = v;
+                }
+                i++;
+            }
+            nextPositions[index].weight_ = weight;
+            return nextPositions[index];
+        }
+
+        auto getDirections()
+        {
+            std::vector<Direction> directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1},{1, -1}, {1, 1}, {-1, 1}, {-1, -1}};
+            return directions;
+        }
+
+        void ruleMoveOnCases(BoardPtr board, std::vector<NextMove> &nextMove)
+        {
+            auto directions = getDirections();
+            auto action = Action(Actions::toMove, nullptr);
+            
+            for(auto direction : directions)
+            {
+                Position targetPosition(position_.row_ + direction.row_, position_.col_ + direction.col_);
+                while(true)
+                {
+                    if(isInRange(board, targetPosition) && isEmptyCell(board, targetPosition))
+                    {
+                        nextMove.push_back(NextMove(action, targetPosition));
+                        targetPosition = Position(targetPosition.row_ + direction.row_, targetPosition.col_ + direction.col_);
+                    }
+
+                    else if(isInRange(board, targetPosition) && !isEmptyCell(board, targetPosition) && isEnemy(board, targetPosition))
+                    {
+                        action = Action(Actions::toTake, getPiece(board, targetPosition));
+                        nextMove.push_back(NextMove(action, targetPosition));
+                        break;
+                    }
+                    else break;
+                }
+            }
+        }
     };
 
     struct Knight : Piece
     {
         Knight(int id, const Position &position, Color color) : Piece(id, "Knight", position, color) {}
+        std::vector<NextMove> nextPossibleMoves(BoardPtr board) override
+        {
+            std::vector<NextMove> nextMove;
+            ruleMoveOnCases(board, nextMove);
+            return nextMove;
+
+        }
+
+        int getWeight(Actions action)
+        {
+            switch (action)
+                {
+                case Actions::none: return -1;
+                case Actions::toMove: return 0;
+                case Actions::toMoveTwo: return -1;
+                case Actions::toCheck: return 2;
+                case Actions::toTake: return 2;
+                case Actions::toPromote: return -1;
+                }
+                return -1;
+        }
+
+        NextMove bestMove(std::vector<NextMove> &nextPositions) override
+        {
+            int weight = 0;
+            int index = 0;
+            int i = 0;
+            for(auto & move : nextPositions)
+            {
+                int v = getWeight(move.action_.actions_);
+                if(v > weight)
+                {
+                    index = i;
+                    weight = v;
+                }
+                i++;
+            }
+            nextPositions[index].weight_ = weight;
+            return nextPositions[index];
+        }
+
+        auto getDirections()
+        {
+            std::vector<Direction> directions = {{1, -2}, {2, -1}, {2, 1}, {1, 2}, {-1, 2}, {-2, 1}, {-2, -1}, {-1, -2}};
+            return directions;
+        }
+
+        void ruleMoveOnCases(BoardPtr board, std::vector<NextMove> &nextMove)
+        {
+            auto directions = getDirections();
+            auto action = Action(Actions::toMove, nullptr);
+            
+            for(auto direction : directions)
+            {
+                Position targetPosition(position_.row_ + direction.row_, position_.col_ + direction.col_);
+                while(true)
+                {
+                    if(isInRange(board, targetPosition) && isEmptyCell(board, targetPosition))
+                    {
+                        nextMove.push_back(NextMove(action, targetPosition));
+                        break;
+                    }
+
+                    else if(isInRange(board, targetPosition) && !isEmptyCell(board, targetPosition) && isEnemy(board, targetPosition))
+                    {
+                        action = Action(Actions::toTake, getPiece(board, targetPosition));
+                        nextMove.push_back(NextMove(action, targetPosition));
+                        break;
+                    }
+                    else break;
+                }
+            }
+        }
     };
 
     struct Pawn : Piece
