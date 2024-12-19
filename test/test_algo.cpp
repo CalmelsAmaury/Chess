@@ -94,7 +94,7 @@ TEST(Pion, PromotePawn)
     EXPECT_TRUE(nextPos[0].action_.actions_ == Actions::toPromote);
 }
 
-TEST(Rook, RookMove)
+TEST(Rook, RookBestMove)
 {
     Model c;
     auto loaded = c.load("Chess.cfg");
@@ -106,13 +106,14 @@ TEST(Rook, RookMove)
     EXPECT_TRUE(piece != nullptr);
 
     auto nextPos = piece->nextPossibleMoves(board);
-    EXPECT_TRUE(nextPos.size() == 12);
-    EXPECT_TRUE(nextPos[0].position_.row_ == 4);
-    EXPECT_TRUE(nextPos[0].position_.col_ == 7);
-    EXPECT_TRUE(nextPos[0].action_.actions_ == Actions::toMove);
+    NextMove best = piece->bestMove(nextPos);
+    EXPECT_TRUE(best.action_.piece_ != nullptr);
+    EXPECT_TRUE(best.action_.piece_->name_ == "Rook");
+    EXPECT_TRUE(best.position_.row_ == 7);
+    EXPECT_TRUE(best.position_.col_ == 7);
 }
 
-TEST(Bishop, BishopMove)
+TEST(Bishop, BishopBestMove)
 {
     Model c;
     auto loaded = c.load("Chess.cfg");
@@ -124,31 +125,33 @@ TEST(Bishop, BishopMove)
     EXPECT_TRUE(piece != nullptr);
 
     auto nextPos = piece->nextPossibleMoves(board);
-    EXPECT_TRUE(nextPos.size() == 9);
-    EXPECT_TRUE(nextPos[0].position_.row_ == 5);
-    EXPECT_TRUE(nextPos[0].position_.col_ == 4);
-    EXPECT_TRUE(nextPos[0].action_.actions_ == Actions::toMove);
+    NextMove best = piece->bestMove(nextPos);
+    EXPECT_TRUE(best.action_.piece_ != nullptr);
+    EXPECT_TRUE(best.action_.piece_->name_ == "Bishop");
+    EXPECT_TRUE(best.position_.row_ == 7);
+    EXPECT_TRUE(best.position_.col_ == 2);
 }
 
-TEST(Queen, QueenMove)
+TEST(Queen, QueenBestMove)
 {
     Model c;
     auto loaded = c.load("Chess.cfg");
     EXPECT_TRUE(loaded);
     auto board = c.CreateBoard();
 
-    auto pos = Position(3, 'h');
+    auto pos = Position(5, 'f');
     auto piece = Piece::getPiece(board, pos);
     EXPECT_TRUE(piece != nullptr);
 
     auto nextPos = piece->nextPossibleMoves(board);
-    EXPECT_TRUE(nextPos.size() == 12);
-    EXPECT_TRUE(nextPos[0].position_.row_ == 4);
-    EXPECT_TRUE(nextPos[0].position_.col_ == 7);
-    EXPECT_TRUE(nextPos[0].action_.actions_ == Actions::toMove);
+    NextMove best = piece->bestMove(nextPos);
+    EXPECT_TRUE(best.action_.piece_ != nullptr);
+    EXPECT_TRUE(best.action_.piece_->name_ == "Bishop");
+    EXPECT_TRUE(best.position_.row_ == 4);
+    EXPECT_TRUE(best.position_.col_ == 5);
 }
 
-TEST(Knight, KnightMove)
+TEST(Knight, KnightBestMove)
 {
     Model c;
     auto loaded = c.load("Chess.cfg");
@@ -160,13 +163,14 @@ TEST(Knight, KnightMove)
     EXPECT_TRUE(piece != nullptr);
 
     auto nextPos = piece->nextPossibleMoves(board);
-    EXPECT_TRUE(nextPos.size() == 7);
-    EXPECT_TRUE(nextPos[0].position_.row_ == 6);
-    EXPECT_TRUE(nextPos[0].position_.col_ == 0);
-    EXPECT_TRUE(nextPos[0].action_.actions_ == Actions::toMove);
+    NextMove best = piece->bestMove(nextPos);
+    EXPECT_TRUE(best.action_.piece_ != nullptr);
+    EXPECT_TRUE(best.action_.piece_->name_ == "Pawn");
+    EXPECT_TRUE(best.position_.row_ == 7);
+    EXPECT_TRUE(best.position_.col_ == 1);
 }
 
-TEST(King, KingMove)
+TEST(King, KingBestMove)
 {
     Model c;
     auto loaded = c.load("Chess.cfg");
@@ -178,13 +182,13 @@ TEST(King, KingMove)
     EXPECT_TRUE(piece != nullptr);
 
     auto nextPos = piece->nextPossibleMoves(board);
-    EXPECT_TRUE(nextPos.size() == 2);
-    EXPECT_TRUE(nextPos[0].position_.row_ == 1);
-    EXPECT_TRUE(nextPos[0].position_.col_ == 4);
-    EXPECT_TRUE(nextPos[0].action_.actions_ == Actions::toMove);
+    NextMove best = piece->bestMove(nextPos);
+    EXPECT_TRUE(best.action_.piece_ == nullptr);
+    EXPECT_TRUE(best.position_.row_ == 1);
+    EXPECT_TRUE(best.position_.col_ == 4);
 }
 
-/*TEST(Chess, BestMovesAllPieces)
+TEST(Chess, BestMovesAllPieces)
 {
     Model c;
     auto loaded = c.load("Chess2.cfg");
@@ -194,14 +198,14 @@ TEST(King, KingMove)
     NextMove best = algo.bestMove(c, Color::white);
     EXPECT_TRUE(best.action_.piece_ != nullptr);
     EXPECT_TRUE(best.action_.piece_->name_ == "Pawn");
-    EXPECT_TRUE(best.position_.row_ == 2);
+    EXPECT_TRUE(best.position_.row_ == 4);
     EXPECT_TRUE(best.position_.col_ == 1);
     best = algo.bestMove(c, Color::black);
     EXPECT_TRUE(best.action_.piece_ != nullptr);
     EXPECT_TRUE(best.action_.piece_->name_ == "Pawn");
     EXPECT_TRUE(best.position_.row_ == 1 || best.position_.row_ == 1);
     EXPECT_TRUE(best.position_.col_ == 2 || best.position_.col_ == 0);
-}*/
+}
 
 int main(int argc, char **argv)
 {

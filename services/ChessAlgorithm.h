@@ -30,8 +30,11 @@ namespace chess
             std::vector<NextMove> bestMoves;
             for (auto piece : model.pieces_)
             {
-                if(piece->color_ != color) continue;
+                if (piece->color_ != color)
+                    continue;
                 auto nextPos = piece->nextPossibleMoves(board);
+                if (nextPos.empty())
+                    continue;
                 NextMove best = piece->bestMove(nextPos);
                 bestMoves.push_back(best);
             }
