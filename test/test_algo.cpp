@@ -146,9 +146,9 @@ TEST(Queen, QueenBestMove)
     auto nextPos = piece->nextPossibleMoves(board);
     NextMove best = piece->bestMove(nextPos);
     EXPECT_TRUE(best.action_.piece_ != nullptr);
-    EXPECT_TRUE(best.action_.piece_->name_ == "Bishop");
-    EXPECT_TRUE(best.position_.row_ == 4);
-    EXPECT_TRUE(best.position_.col_ == 5);
+    EXPECT_TRUE(best.action_.piece_->name_ == "Rook");
+    EXPECT_TRUE(best.position_.row_ == 3 || best.position_.row_ == 0);
+    EXPECT_TRUE(best.position_.col_ == 7 || best.position_.col_ == 0);
 }
 
 TEST(Knight, KnightBestMove)

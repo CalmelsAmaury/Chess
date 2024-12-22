@@ -130,8 +130,21 @@ namespace chess
             return false;
         }
 
-        virtual int getWeight(Actions action)
+        virtual int getWeight(Actions action, PiecePtr targetedPiece)
         {
+            int pieceValue = 0;
+            if (targetedPiece)
+            {
+                if (targetedPiece->name_ == "Pawn")
+                    pieceValue = 1;
+                else if (targetedPiece->name_ == "Knight" || targetedPiece->name_ == "Bishop")
+                    pieceValue = 3;
+                else if (targetedPiece->name_ == "Rook")
+                    pieceValue = 5;
+                else if (targetedPiece->name_ == "Queen")
+                    pieceValue = 9;
+            }
+
             switch (action)
             {
             case Actions::none:
@@ -139,13 +152,13 @@ namespace chess
             case Actions::toMove:
                 return 0;
             case Actions::toMoveTwo:
-                return -1;
+                return 0;
             case Actions::toCheck:
-                return 2;
+                return 1;
             case Actions::toTake:
-                return 2;
+                return pieceValue;
             case Actions::toPromote:
-                return -1;
+                return 9;
             }
             return -1;
         }
@@ -157,7 +170,7 @@ namespace chess
             int i = 0;
             for (auto &move : nextPositions)
             {
-                int v = getWeight(move.action_.actions_);
+                int v = getWeight(move.action_.actions_, move.action_.piece_);
                 if (v > weight)
                 {
                     index = i;
@@ -425,26 +438,6 @@ namespace chess
             return nextMove;
         }
 
-        int getWeight(Actions action) override
-        {
-            switch (action)
-            {
-            case Actions::none:
-                return -1;
-            case Actions::toMove:
-                return 0;
-            case Actions::toMoveTwo:
-                return 1;
-            case Actions::toCheck:
-                return 2;
-            case Actions::toTake:
-                return 2;
-            case Actions::toPromote:
-                return 3;
-            }
-            return -1;
-        }
-
         // avance de 1 dans la direction de la couleur
         int getDirection()
         {
@@ -695,9 +688,8 @@ namespace chess
             return board;
         }
 
-
         std::string WHITE_COLOR = "\033[36m";
-        std::string BLACK_COLOR = "\033[91m"; 
+        std::string BLACK_COLOR = "\033[91m";
         std::string PINK_COLOR = "\033[32m";
         std::string RESET_COLOR = "\033[0m";
         std::string WHITE_BACKGROUND = "\033[100m";
@@ -705,31 +697,32 @@ namespace chess
 
         void PrintBoard(BoardPtr board)
         {
-            std::cout << PINK_COLOR << "   A  B  C  D  E  F  G  H\n" << RESET_COLOR;
+            std::cout << PINK_COLOR << "     0  1  2  3  4  5  6  7\n" << RESET_COLOR;
+            std::cout << PINK_COLOR << "     A  B  C  D  E  F  G  H\n" << RESET_COLOR;
             for (int i = 7; i >= 0; i--)
             {
-                std::cout << PINK_COLOR << i + 1 << " " << RESET_COLOR;
+                std::cout << PINK_COLOR << i << "|" << i + 1 << " " << RESET_COLOR;
                 for (int j = 0; j <= 7; j++)
                 {
                     std::string background_color = (i + j) % 2 == 0 ? BLACK_BACKGROUND : WHITE_BACKGROUND;
                     std::cout << background_color;
 
                     auto &cell = (*board)[i][j];
-                    if(cell.piece)
+                    if (cell.piece)
                     {
                         auto &piece = cell.piece;
-                        char symbol = piece->name_ == "King"    ? (piece->color_ == Color::white ? 'K' : 'k') 
-                                    : piece->name_ == "Queen"   ? (piece->color_ == Color::white ? 'Q' : 'q')
-                                    : piece->name_ == "Rook"    ? (piece->color_ == Color::white ? 'R' : 'r')
-                                    : piece->name_ == "Bishop"  ? (piece->color_ == Color::white ? 'B' : 'b')
-                                    : piece->name_ == "Knight"  ? (piece->color_ == Color::white ? 'N' : 'n')
-                                    : piece->name_ == "Pawn"    ? (piece->color_ == Color::white ? 'P' : 'p') 
-                                    : '?';
-                        if (piece->color_ == Color::white) 
+                        char symbol = piece->name_ == "King"     ? (piece->color_ == Color::white ? 'K' : 'k')
+                                      : piece->name_ == "Queen"  ? (piece->color_ == Color::white ? 'Q' : 'q')
+                                      : piece->name_ == "Rook"   ? (piece->color_ == Color::white ? 'R' : 'r')
+                                      : piece->name_ == "Bishop" ? (piece->color_ == Color::white ? 'B' : 'b')
+                                      : piece->name_ == "Knight" ? (piece->color_ == Color::white ? 'N' : 'n')
+                                      : piece->name_ == "Pawn"   ? (piece->color_ == Color::white ? 'P' : 'p')
+                                                                 : '?';
+                        if (piece->color_ == Color::white)
                         {
                             std::cout << WHITE_COLOR << " " << symbol << " " << RESET_COLOR;
-                        } 
-                        else if (piece->color_ == Color::black) 
+                        }
+                        else if (piece->color_ == Color::black)
                         {
                             std::cout << BLACK_COLOR << " " << symbol << " " << RESET_COLOR;
                         }
@@ -740,8 +733,11 @@ namespace chess
                     }
                     std::cout << RESET_COLOR;
                 }
+                std::cout << PINK_COLOR << " " << i + 1 << "|" << i << " " << RESET_COLOR;
                 std::cout << "\n";
             }
+            std::cout << PINK_COLOR << "     A  B  C  D  E  F  G  H\n" << RESET_COLOR;
+            std::cout << PINK_COLOR << "     0  1  2  3  4  5  6  7\n" << RESET_COLOR;
         }
 
         std::vector<PiecePtr> pieces_;
