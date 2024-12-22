@@ -207,6 +207,15 @@ TEST(Chess, BestMovesAllPieces)
     EXPECT_TRUE(best.position_.col_ == 2 || best.position_.col_ == 0);
 }
 
+TEST(Board, PrintBoard)
+{
+    Model c;
+    auto loaded = c.load("Chess.cfg");
+    EXPECT_TRUE(loaded);
+    auto board = c.CreateBoard();
+    c.PrintBoard(board);
+}
+
 int main(int argc, char **argv)
 {
     ::testing::InitGoogleTest(&argc, argv);
