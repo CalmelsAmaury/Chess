@@ -68,12 +68,27 @@ Attendre la validation de cette étape. VALIDE LE 2/12/2024
 6.7 Pions (8 pièces)/ 
 
   
-Attendre la validation de cette étape.  
+# 7 - Créer un fonction qui dessine l'echiquier comme ci-dessous
+ 
+
+    0  1  2  3  4  5  6  7
+    A  B  C  D  E  F  G  H
+  +------------------------+
+0 | R  K  B  Q ^K ^.  K  . | 0
+1 | P  .  P  P *.  P  P  P | 1
+2 | .  p  .  .  .  .  .  p | 2
+3 | .  .  .  .  .  .  .  R | 3
+4 | .  p  P  p  .  B  .  . | 4
+5 | .  .  k  .  .  q  .  . | 5
+6 | .  .  p  .  p  p  p  . | 6
+7 | r  P  b  .  k  b  k  r | 7
+  +------------------------+
+    A  B  C  D  E  F  G  H
+    0  1  2  3  4  5  6  7
 
 
 
-
-# 6 - exercice d'explication oral à Fabrice & Marylise du code (à la Feynman)
+# N - exercice d'explication oral à Fabrice & Marylise du code (à la Feynman)
 
 Attendre la validation de cette étape. 
 
