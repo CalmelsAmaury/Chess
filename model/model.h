@@ -283,6 +283,7 @@ namespace chess
 
     struct King : Piece
     {
+        bool isCheck = false;
         King(int id, const Position &position, Color color) : Piece(id, "King", position, color) {}
         std::vector<NextMove> nextPossibleMoves(BoardPtr board) override
         {
@@ -321,6 +322,30 @@ namespace chess
                     }
                     else
                         break;
+                }
+            }
+        }
+
+        void ruleIsCheck(BoardPtr board)
+        {
+            for (int row = 0; row < 8; row++)
+            {
+                for (int col = 0; col < 8; col++)
+                {
+                    auto piece = (*board)[row][col].piece;
+                    if(piece && isEnemy(board, Position(row, col)))
+                    {
+                        auto nextMoves = piece->nextPossibleMoves(board);
+
+                        for(auto move : nextMoves)
+                        {
+                            if(move.position_.row_ == position_.row_ && move.position_.col_ == move.position_.col_)
+                            {
+                                isCheck = true;
+                                return;
+                            }
+                        }
+                    }
                 }
             }
         }

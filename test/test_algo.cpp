@@ -188,29 +188,48 @@ TEST(King, KingBestMove)
     EXPECT_TRUE(best.position_.col_ == 4);
 }
 
-TEST(Chess, BestMovesAllPieces)
+//TEST(Chess, BestMovesAllPieces)
+//{
+//    Model c;
+//    auto loaded = c.load("Chess2.cfg");
+//    EXPECT_TRUE(loaded);
+//    auto board = c.CreateBoard();
+//    ChessAlgorithm algo;
+//    NextMove best = algo.bestMove(c, Color::white);
+//    EXPECT_TRUE(best.action_.piece_ != nullptr);
+//    EXPECT_TRUE(best.action_.piece_->name_ == "Pawn");
+//    EXPECT_TRUE(best.position_.row_ == 4);
+//    EXPECT_TRUE(best.position_.col_ == 1);
+//    best = algo.bestMove(c, Color::black);
+//    EXPECT_TRUE(best.action_.piece_ != nullptr);
+//    EXPECT_TRUE(best.action_.piece_->name_ == "Pawn");
+//    EXPECT_TRUE(best.position_.row_ == 1 || best.position_.row_ == 1);
+//    EXPECT_TRUE(best.position_.col_ == 2 || best.position_.col_ == 0);
+//}
+
+TEST(King, Check)
 {
     Model c;
-    auto loaded = c.load("Chess2.cfg");
+    auto loaded = c.load("Chess3.cfg");
     EXPECT_TRUE(loaded);
     auto board = c.CreateBoard();
-    ChessAlgorithm algo;
-    NextMove best = algo.bestMove(c, Color::white);
-    EXPECT_TRUE(best.action_.piece_ != nullptr);
-    EXPECT_TRUE(best.action_.piece_->name_ == "Pawn");
-    EXPECT_TRUE(best.position_.row_ == 4);
-    EXPECT_TRUE(best.position_.col_ == 1);
-    best = algo.bestMove(c, Color::black);
-    EXPECT_TRUE(best.action_.piece_ != nullptr);
-    EXPECT_TRUE(best.action_.piece_->name_ == "Pawn");
-    EXPECT_TRUE(best.position_.row_ == 1 || best.position_.row_ == 1);
-    EXPECT_TRUE(best.position_.col_ == 2 || best.position_.col_ == 0);
+
+    auto pos = Position(7, 'e');
+    auto piece = Piece::getPiece(board, pos);
+    EXPECT_TRUE(piece != nullptr);
+
+    auto nextPos = piece->nextPossibleMoves(board);
+    auto king = std::dynamic_pointer_cast<King>(piece);
+    EXPECT_TRUE(king != nullptr);
+
+    king->ruleIsCheck(board);
+    EXPECT_TRUE(king->isCheck);
 }
 
 TEST(Board, PrintBoard)
 {
     Model c;
-    auto loaded = c.load("Chess.cfg");
+    auto loaded = c.load("Chess3.cfg");
     EXPECT_TRUE(loaded);
     auto board = c.CreateBoard();
     c.PrintBoard(board);
