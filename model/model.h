@@ -130,6 +130,30 @@ namespace chess
             return false;
         }
 
+        bool ruleIsCheck(BoardPtr board, Position &pos)
+        {
+            for (int row = 0; row < 8; row++)
+            {
+                for (int col = 0; col < 8; col++)
+                {
+                    auto piece = (*board)[row][col].piece;
+                    if(piece && isEnemy(board, Position(row, col)))
+                    {
+                        auto nextMoves = piece->nextPossibleMoves(board);
+
+                        for(auto move : nextMoves)
+                        {
+                            if(move.position_.row_ == pos.row_ && move.position_.col_ == pos.col_)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
         virtual int getWeight(Actions action, PiecePtr targetedPiece)
         {
             int pieceValue = 0;
@@ -283,7 +307,6 @@ namespace chess
 
     struct King : Piece
     {
-        bool isCheck = false;
         King(int id, const Position &position, Color color) : Piece(id, "King", position, color) {}
         std::vector<NextMove> nextPossibleMoves(BoardPtr board) override
         {
@@ -306,19 +329,29 @@ namespace chess
             for (auto direction : directions)
             {
                 Position targetPosition(position_.row_ + direction.row_, position_.col_ + direction.col_);
-                while (true)
+                while(true)
                 {
-                    if (isInRange(board, targetPosition) && isEmptyCell(board, targetPosition))
+                    if(isInRange(board, targetPosition))
                     {
-                        nextMove.push_back(NextMove(action, targetPosition));
-                        break;
-                    }
+                        if (isEmptyCell(board, targetPosition))
+                        {   
+                            if(!ruleIsCheck(board, targetPosition))
+                            {
+                                nextMove.push_back(NextMove(action, targetPosition));
+                                break;
+                            }
+                        }
 
-                    else if (isInRange(board, targetPosition) && !isEmptyCell(board, targetPosition) && isEnemy(board, targetPosition))
-                    {
-                        action = Action(Actions::toTake, getPiece(board, targetPosition));
-                        nextMove.push_back(NextMove(action, targetPosition));
-                        break;
+                        else if (!isEmptyCell(board, targetPosition) && isEnemy(board, targetPosition))
+                        {
+                            if(!ruleIsCheck(board, targetPosition))
+                            {
+                                action = Action(Actions::toTake, getPiece(board, targetPosition));
+                                nextMove.push_back(NextMove(action, targetPosition));
+                                break;
+                            }
+                            
+                        }
                     }
                     else
                         break;
@@ -326,29 +359,6 @@ namespace chess
             }
         }
 
-        void ruleIsCheck(BoardPtr board)
-        {
-            for (int row = 0; row < 8; row++)
-            {
-                for (int col = 0; col < 8; col++)
-                {
-                    auto piece = (*board)[row][col].piece;
-                    if(piece && isEnemy(board, Position(row, col)))
-                    {
-                        auto nextMoves = piece->nextPossibleMoves(board);
-
-                        for(auto move : nextMoves)
-                        {
-                            if(move.position_.row_ == position_.row_ && move.position_.col_ == move.position_.col_)
-                            {
-                                isCheck = true;
-                                return;
-                            }
-                        }
-                    }
-                }
-            }
-        }
     };
 
     struct Queen : Piece

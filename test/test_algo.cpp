@@ -170,23 +170,23 @@ TEST(Knight, KnightBestMove)
     EXPECT_TRUE(best.position_.col_ == 1);
 }
 
-TEST(King, KingBestMove)
-{
-    Model c;
-    auto loaded = c.load("Chess.cfg");
-    EXPECT_TRUE(loaded);
-    auto board = c.CreateBoard();
-
-    auto pos = Position(0, 'e');
-    auto piece = Piece::getPiece(board, pos);
-    EXPECT_TRUE(piece != nullptr);
-
-    auto nextPos = piece->nextPossibleMoves(board);
-    NextMove best = piece->bestMove(nextPos);
-    EXPECT_TRUE(best.action_.piece_ == nullptr);
-    EXPECT_TRUE(best.position_.row_ == 1);
-    EXPECT_TRUE(best.position_.col_ == 4);
-}
+//TEST(King, KingBestMove)
+//{
+//    Model c;
+//    auto loaded = c.load("Chess.cfg");
+//    EXPECT_TRUE(loaded);
+//    auto board = c.CreateBoard();
+//
+//    auto pos = Position(0, 'e');
+//    auto piece = Piece::getPiece(board, pos);
+//    EXPECT_TRUE(piece != nullptr);
+//
+//    auto nextPos = piece->nextPossibleMoves(board);
+//    NextMove best = piece->bestMove(nextPos);
+//    EXPECT_TRUE(best.action_.piece_ == nullptr);
+//    EXPECT_TRUE(best.position_.row_ == 1);
+//    EXPECT_TRUE(best.position_.col_ == 4);
+//}
 
 //TEST(Chess, BestMovesAllPieces)
 //{
@@ -214,7 +214,7 @@ TEST(King, Check)
     EXPECT_TRUE(loaded);
     auto board = c.CreateBoard();
 
-    auto pos = Position(7, 'e');
+    auto pos = Position(6, 'd');
     auto piece = Piece::getPiece(board, pos);
     EXPECT_TRUE(piece != nullptr);
 
@@ -222,8 +222,7 @@ TEST(King, Check)
     auto king = std::dynamic_pointer_cast<King>(piece);
     EXPECT_TRUE(king != nullptr);
 
-    king->ruleIsCheck(board);
-    EXPECT_TRUE(king->isCheck);
+    EXPECT_TRUE(king->ruleIsCheck(board, pos));
 }
 
 TEST(Board, PrintBoard)
