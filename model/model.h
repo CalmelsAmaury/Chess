@@ -130,30 +130,6 @@ namespace chess
             return false;
         }
 
-        bool ruleIsCheck(BoardPtr board, Position &pos)
-        {
-            for (int row = 0; row < 8; row++)
-            {
-                for (int col = 0; col < 8; col++)
-                {
-                    auto piece = (*board)[row][col].piece;
-                    if(piece && isEnemy(board, Position(row, col)))
-                    {
-                        auto nextMoves = piece->nextPossibleMoves(board);
-
-                        for(auto move : nextMoves)
-                        {
-                            if(move.position_.row_ == pos.row_ && move.position_.col_ == pos.col_)
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
-            return false;
-        }
-
         virtual int getWeight(Actions action, PiecePtr targetedPiece)
         {
             int pieceValue = 0;
@@ -352,6 +328,8 @@ namespace chess
                             }
                             
                         }
+                        else
+                            break;
                     }
                     else
                         break;
@@ -359,6 +337,30 @@ namespace chess
             }
         }
 
+        bool ruleIsCheck(BoardPtr board, Position &pos)
+        {
+            for (int row = 0; row < 8; row++)
+            {
+                for (int col = 0; col < 8; col++)
+                {
+                    auto piece = (*board)[row][col].piece;
+                    if(piece && isEnemy(board, Position(row, col)))
+                    {
+                        auto nextMoves = piece->nextPossibleMoves(board);
+
+                        for(auto &move : nextMoves)
+                        {
+                            if(move.position_.row_ == pos.row_ && move.position_.col_ == pos.col_)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                    continue;
+                }
+            }
+            return false;
+        }
     };
 
     struct Queen : Piece
