@@ -130,6 +130,8 @@ namespace chess
             return false;
         }
 
+        virtual bool doesItCheck(BoardPtr board, Position &targetPosition) { return {}; }
+
         virtual int getWeight(Actions action, PiecePtr targetedPiece)
         {
             int pieceValue = 0;
@@ -246,7 +248,7 @@ namespace chess
         }
 
         auto getDirections()
-        {
+        {   
             std::vector<Direction> directions = {{1, -1}, {1, 1}, {-1, 1}, {-1, -1}};
             return directions;
         }
@@ -278,6 +280,35 @@ namespace chess
                         break;
                 }
             }
+        }
+
+        // Fonction pour trouver les cases entre le fou et une autre position
+        bool doesItCheck(BoardPtr board, Position &targetPositionKing) 
+        {
+            // Vérifier si les deux positions sont sur la même diagonale
+            if (abs(position_.col_ - targetPositionKing.col_) != abs(position_.row_ - targetPositionKing.row_ )) 
+            {
+                return false;
+            }
+            // Calcul de la direction du mouvement
+            int dx = (targetPositionKing.col_ > position_.col_) ? 1 : -1;
+            int dy = (targetPositionKing.row_ > position_.row_) ? 1 : -1;
+            // Parcourir les cases entre le fou et la destination (excluant la destination)
+            int x = position_.col_ + dx;
+            int y = position_.row_ + dy;
+
+            while (x != targetPositionKing.col_ && y != targetPositionKing.row_) 
+            {
+                Position intermediatePosition(y, x);
+                if (!isEmptyCell(board, intermediatePosition)) 
+                {
+                    return false; // Un obstacle bloque la diagonale
+                }
+                x += dx;
+                y += dy;
+            }
+
+            return true;
         }
     };
 
@@ -337,7 +368,7 @@ namespace chess
             }
         }
 
-        bool ruleIsCheck(BoardPtr board, Position &pos)
+        bool ruleIsCheck(BoardPtr board, Position &targetPosition)
         {
             for (int row = 0; row < 8; row++)
             {
@@ -346,14 +377,9 @@ namespace chess
                     auto piece = (*board)[row][col].piece;
                     if(piece && isEnemy(board, Position(row, col)))
                     {
-                        auto nextMoves = piece->nextPossibleMoves(board);
-
-                        for(auto &move : nextMoves)
+                        if(piece->doesItCheck(board, targetPosition))
                         {
-                            if(move.position_.row_ == pos.row_ && move.position_.col_ == pos.col_)
-                            {
-                                return true;
-                            }
+                            return true;
                         }
                     }
                     continue;
