@@ -86,6 +86,9 @@ Attendre la validation de cette étape. VALIDE LE 2/12/2024
     A  B  C  D  E  F  G  H
     0  1  2  3  4  5  6  7
 
+VALIDE LE 27/12/2024
+
+# 8 - Refactoriser l'application avec un fichier par piece, un fichier pour le modèle
 
 
 # N - exercice d'explication oral à Fabrice & Marylise du code (à la Feynman)
