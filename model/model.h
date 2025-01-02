@@ -130,7 +130,7 @@ namespace chess
             return false;
         }
 
-        virtual bool doesItCheck(BoardPtr board, Position &targetPosition) { return {}; }
+        virtual bool doesItCheck(BoardPtr board, const Position &targetPosition) { return {}; }
 
         virtual int getWeight(Actions action, PiecePtr targetedPiece)
         {
@@ -264,26 +264,31 @@ namespace chess
                 Position targetPosition(position_.row_ + direction.row_, position_.col_ + direction.col_);
                 while (true)
                 {
-                    if (isInRange(board, targetPosition) && isEmptyCell(board, targetPosition))
+                    if (!isInRange(board, targetPosition))
+                    {
+                        break;
+                    }
+                    else if (!isEmptyCell(board, targetPosition) && !isEnemy(board, targetPosition))
+                    {
+                        break;
+                    }
+                    else if(isEmptyCell(board, targetPosition))
                     {
                         nextMove.push_back(NextMove(action, targetPosition));
                         targetPosition = Position(targetPosition.row_ + direction.row_, targetPosition.col_ + direction.col_);
                     }
-
-                    else if (isInRange(board, targetPosition) && !isEmptyCell(board, targetPosition) && isEnemy(board, targetPosition))
+                    else if (!isEmptyCell(board, targetPosition) && isEnemy(board, targetPosition))
                     {
                         action = Action(Actions::toTake, getPiece(board, targetPosition));
                         nextMove.push_back(NextMove(action, targetPosition));
                         break;
-                    }
-                    else
-                        break;
+                    }                   
                 }
             }
         }
 
         // Fonction pour trouver les cases entre le fou et une autre position
-        bool doesItCheck(BoardPtr board, Position &targetPositionKing) 
+        bool doesItCheck(BoardPtr board, const Position &targetPositionKing) override
         {
             // Vérifier si les deux positions sont sur la même diagonale
             if (abs(position_.col_ - targetPositionKing.col_) != abs(position_.row_ - targetPositionKing.row_ )) 
@@ -336,35 +341,32 @@ namespace chess
             for (auto direction : directions)
             {
                 Position targetPosition(position_.row_ + direction.row_, position_.col_ + direction.col_);
-                while(true)
+                if(!isInRange(board, targetPosition))
                 {
-                    if(isInRange(board, targetPosition))
-                    {
-                        if (isEmptyCell(board, targetPosition))
-                        {   
-                            if(!ruleIsCheck(board, targetPosition))
-                            {
-                                nextMove.push_back(NextMove(action, targetPosition));
-                                break;
-                            }
-                        }
-
-                        else if (!isEmptyCell(board, targetPosition) && isEnemy(board, targetPosition))
-                        {
-                            if(!ruleIsCheck(board, targetPosition))
-                            {
-                                action = Action(Actions::toTake, getPiece(board, targetPosition));
-                                nextMove.push_back(NextMove(action, targetPosition));
-                                break;
-                            }
-                            
-                        }
-                        else
-                            break;
-                    }
-                    else
-                        break;
+                    continue;
                 }
+                else if (!isEmptyCell(board, targetPosition) && !isEnemy(board, targetPosition))
+                {
+                    continue;
+                }
+                else if(ruleIsCheck(board, targetPosition))
+                {
+                    continue;
+                }
+                else if(isEmptyCell(board, targetPosition))
+                {   
+                    nextMove.push_back(NextMove(action, targetPosition));
+                    continue;                    
+                }
+                else if (isEnemy(board, targetPosition))
+                {
+                    
+                    action = Action(Actions::toTake, getPiece(board, targetPosition));
+                    nextMove.push_back(NextMove(action, targetPosition));
+                    continue;
+                }
+                else
+                    continue;          
             }
         }
 
@@ -375,14 +377,19 @@ namespace chess
                 for (int col = 0; col < 8; col++)
                 {
                     auto piece = (*board)[row][col].piece;
-                    if(piece && isEnemy(board, Position(row, col)))
+                    if(!piece)
                     {
-                        if(piece->doesItCheck(board, targetPosition))
-                        {
-                            return true;
-                        }
+                        continue;
                     }
-                    continue;
+                    else if(!isEnemy(board, Position(row, col)))
+                    {
+                        continue;
+                    }
+                    else if(piece->doesItCheck(board, targetPosition))
+                    {
+                        std::cout << "Cette  case est attaquee : " << "Row " << targetPosition.row_ << " Col " << targetPosition.col_ << std::endl;
+                        return true;
+                    }               
                 }
             }
             return false;
