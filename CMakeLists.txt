@@ -12,6 +12,7 @@ add_subdirectory(model)
 add_subdirectory(services)
 include_directories(model)
 include_directories(services)
+include_directories(presentation)
 
 add_library(ChessLib ${SOURCES_FILES})
 

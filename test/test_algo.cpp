@@ -2,6 +2,7 @@
 #include <gtest/gtest.h>
 #include "model.h"
 #include "ChessAlgorithm.h"
+#include "PrintingBoard.h"
 using namespace chess;
 
 TEST(Pion, ThePawnMovesStraight)
@@ -213,7 +214,8 @@ TEST(King, QueenAndPawnCheck)
     auto loaded = c.load("Chess3.cfg");
     EXPECT_TRUE(loaded);
     auto board = c.CreateBoard();
-    c.PrintBoard(board);
+    PrintingBoard p;
+    p.PrintBoard(board);
 
     auto pos = Position(5, 'd');
     auto piece = Piece::getPiece(board, pos);
@@ -229,7 +231,8 @@ TEST(King, RookAndKnightAndKingCheck)
     auto loaded = c.load("Chess4.cfg");
     EXPECT_TRUE(loaded);
     auto board = c.CreateBoard();
-    c.PrintBoard(board);
+    PrintingBoard p;
+    p.PrintBoard(board);
 
     auto pos = Position(4, 'd');
     auto piece = Piece::getPiece(board, pos);
@@ -245,7 +248,8 @@ TEST(Board, PrintBoard)
     auto loaded = c.load("ChessInitialPosition.cfg");
     EXPECT_TRUE(loaded);
     auto board = c.CreateBoard();
-    c.PrintBoard(board);
+    PrintingBoard p;
+    p.PrintBoard(board);
 }
 
 int main(int argc, char **argv)
