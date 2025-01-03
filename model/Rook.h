@@ -61,7 +61,7 @@ struct Rook : Piece
         int x = position_.col_ + dx;
         int y = position_.row_ + dy;
 
-        while (x != targetPositionKing.col_ && y != targetPositionKing.row_)
+        while (x != targetPositionKing.col_ || y != targetPositionKing.row_)
         {
             Position intermediatePosition(y, x);
             if (!isEmptyCell(board, intermediatePosition))
