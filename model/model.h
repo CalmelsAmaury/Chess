@@ -235,6 +235,35 @@ namespace chess
                 }
             }
         }
+
+        // Fonction pour savoir si la tour met en echec le roi
+        bool doesItCheck(BoardPtr board, const Position &targetPositionKing) override
+        {
+            if (position_.col_ != targetPositionKing.col_ && position_.row_ != targetPositionKing.row_)
+            {
+                return false;
+            }
+
+            int dx = (position_.col_ == targetPositionKing.col_) ? 0 : (targetPositionKing.col_ > position_.col_) ? 1
+                                                                                                                  : -1;
+            int dy = (position_.row_ == targetPositionKing.row_) ? 0 : (targetPositionKing.row_ > position_.row_) ? 1
+                                                                                                                  : -1;
+
+            int x = position_.col_ + dx;
+            int y = position_.row_ + dy;
+
+            while (x != targetPositionKing.col_ && y != targetPositionKing.row_)
+            {
+                Position intermediatePosition(y, x);
+                if (!isEmptyCell(board, intermediatePosition))
+                {
+                    return false;
+                }
+                x += dx;
+                y += dy;
+            }
+            return true;
+        }
     };
 
     struct Bishop : Piece
@@ -248,7 +277,7 @@ namespace chess
         }
 
         auto getDirections()
-        {   
+        {
             std::vector<Direction> directions = {{1, -1}, {1, 1}, {-1, 1}, {-1, -1}};
             return directions;
         }
@@ -272,7 +301,7 @@ namespace chess
                     {
                         break;
                     }
-                    else if(isEmptyCell(board, targetPosition))
+                    else if (isEmptyCell(board, targetPosition))
                     {
                         nextMove.push_back(NextMove(action, targetPosition));
                         targetPosition = Position(targetPosition.row_ + direction.row_, targetPosition.col_ + direction.col_);
@@ -282,16 +311,16 @@ namespace chess
                         action = Action(Actions::toTake, getPiece(board, targetPosition));
                         nextMove.push_back(NextMove(action, targetPosition));
                         break;
-                    }                   
+                    }
                 }
             }
         }
 
-        // Fonction pour trouver les cases entre le fou et une autre position
+        // Fonction pour savoir si le fou met en echec le roi
         bool doesItCheck(BoardPtr board, const Position &targetPositionKing) override
         {
             // Vérifier si les deux positions sont sur la même diagonale
-            if (abs(position_.col_ - targetPositionKing.col_) != abs(position_.row_ - targetPositionKing.row_ )) 
+            if (abs(position_.col_ - targetPositionKing.col_) != abs(position_.row_ - targetPositionKing.row_))
             {
                 return false;
             }
@@ -302,10 +331,10 @@ namespace chess
             int x = position_.col_ + dx;
             int y = position_.row_ + dy;
 
-            while (x != targetPositionKing.col_ && y != targetPositionKing.row_) 
+            while (x != targetPositionKing.col_ && y != targetPositionKing.row_)
             {
                 Position intermediatePosition(y, x);
-                if (!isEmptyCell(board, intermediatePosition)) 
+                if (!isEmptyCell(board, intermediatePosition))
                 {
                     return false; // Un obstacle bloque la diagonale
                 }
@@ -341,7 +370,7 @@ namespace chess
             for (auto direction : directions)
             {
                 Position targetPosition(position_.row_ + direction.row_, position_.col_ + direction.col_);
-                if(!isInRange(board, targetPosition))
+                if (!isInRange(board, targetPosition))
                 {
                     continue;
                 }
@@ -349,24 +378,24 @@ namespace chess
                 {
                     continue;
                 }
-                else if(ruleIsCheck(board, targetPosition))
+                else if (ruleIsCheck(board, targetPosition))
                 {
                     continue;
                 }
-                else if(isEmptyCell(board, targetPosition))
-                {   
+                else if (isEmptyCell(board, targetPosition))
+                {
                     nextMove.push_back(NextMove(action, targetPosition));
-                    continue;                    
+                    continue;
                 }
                 else if (isEnemy(board, targetPosition))
                 {
-                    
+
                     action = Action(Actions::toTake, getPiece(board, targetPosition));
                     nextMove.push_back(NextMove(action, targetPosition));
                     continue;
                 }
                 else
-                    continue;          
+                    continue;
             }
         }
 
@@ -377,19 +406,36 @@ namespace chess
                 for (int col = 0; col < 8; col++)
                 {
                     auto piece = (*board)[row][col].piece;
-                    if(!piece)
+                    if (!piece)
                     {
                         continue;
                     }
-                    else if(!isEnemy(board, Position(row, col)))
+                    else if (!isEnemy(board, Position(row, col)))
                     {
                         continue;
                     }
-                    else if(piece->doesItCheck(board, targetPosition))
+                    else if (piece->doesItCheck(board, targetPosition))
                     {
                         std::cout << "Cette  case est attaquee : " << "Row " << targetPosition.row_ << " Col " << targetPosition.col_ << std::endl;
                         return true;
-                    }               
+                    }
+                }
+            }
+            return false;
+        }
+
+        // Fonction pour savoir si le roi empêche un déplacement du roi adverse
+        bool doesItCheck(BoardPtr board, const Position &targetPositionKing) override
+        {
+            auto directions = getDirections();
+
+            for (auto direction : directions)
+            {
+                Position targetPosition(position_.row_ + direction.row_, position_.col_ + direction.col_);
+
+                if (targetPosition.row_ == targetPositionKing.row_ && targetPosition.col_ == targetPositionKing.col_)
+                {
+                    return true;
                 }
             }
             return false;
@@ -440,6 +486,34 @@ namespace chess
                 }
             }
         }
+
+        // Fonction pour savoir si la reine met en echec le roi
+        bool doesItCheck(BoardPtr board, const Position &targetPositionKing) override
+        {
+            if (position_.col_ != targetPositionKing.col_ && position_.row_ != targetPositionKing.row_ && abs(position_.col_ - targetPositionKing.col_) != abs(position_.row_ - targetPositionKing.row_))
+            {
+                return false;
+            }
+
+            int dx = (position_.col_ == targetPositionKing.col_) ? 0 : (targetPositionKing.col_ > position_.col_) ? 1
+                                                                                                                  : -1;
+            int dy = (position_.row_ == targetPositionKing.row_) ? 0 : (targetPositionKing.row_ > position_.row_) ? 1
+                                                                                                                  : -1;
+            int x = position_.col_ + dx;
+            int y = position_.row_ + dy;
+
+            while (x != targetPositionKing.col_ && y != targetPositionKing.row_)
+            {
+                Position intermediatePosition(y, x);
+                if (!isEmptyCell(board, intermediatePosition))
+                {
+                    return false;
+                }
+                x += dx;
+                y += dy;
+            }
+            return true;
+        }
     };
 
     struct Knight : Piece
@@ -488,6 +562,31 @@ namespace chess
                         break;
                 }
             }
+        }
+
+        // Fonction pour savoir si le cavalier met en echec le roi
+        bool doesItCheck(BoardPtr board, const Position &targetPositionKing) override
+        {
+            int dx = abs(position_.col_ - targetPositionKing.col_);
+            int dy = abs(position_.row_ - targetPositionKing.row_);
+
+            if ((dx + dy) != 3)
+            {
+                return false;
+            }
+
+            auto directions = getDirections();
+
+            for (auto direction : directions)
+            {
+                Position targetPosition(position_.row_ + direction.row_, position_.col_ + direction.col_);
+
+                if (targetPosition.col_ == targetPositionKing.col_ && targetPosition.row_ == targetPositionKing.row_)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     };
 
@@ -565,7 +664,7 @@ namespace chess
             }
         }
 
-        // ce dernier a la possibilité de prendre comme si le coup de début n'avait été que d'une case. Cette prise en passant ne peut se faire qu'en réponse immédiate à l'avance double
+        // Ce dernier a la possibilité de prendre comme si le coup de début n'avait été que d'une case. Cette prise en passant ne peut se faire qu'en réponse immédiate à l'avance double
         void rulePriseEnPassant(BoardPtr board, std::vector<NextMove> &nextMove)
         {
             auto direction = getDirection();
@@ -581,7 +680,7 @@ namespace chess
                 {
                     nextMove.push_back(NextMove(action, positionLeftDiagonal));
                 }
-                if (isInRange(board, positionRightDiagonal) && isInRange(board, positionRight) && isEmptyCell(board, positionRightDiagonal) && !isEmptyCell(board, positionRight) && isEnemy(board, positionRight) && isPawn(board, positionLeft))
+                if (isInRange(board, positionRightDiagonal) && isInRange(board, positionRight) && isEmptyCell(board, positionRightDiagonal) && !isEmptyCell(board, positionRight) && isEnemy(board, positionRight) && isPawn(board, positionRight))
                 {
                     nextMove.push_back(NextMove(action, positionRightDiagonal));
                 }
@@ -597,6 +696,20 @@ namespace chess
             {
                 nextMove.push_back(NextMove(action, position_));
             }
+        }
+
+        // Fonction pour savoir si le pion met en echec le roi
+        bool doesItCheck(BoardPtr board, const Position &targetPositionKing) override
+        {
+            auto direction = getDirection();
+            Position positionLeftDiagonal(position_.row_ + direction, position_.col_ - 1);
+            Position positionRightDiagonal(position_.row_ + direction, position_.col_ + 1);
+
+            if (targetPositionKing.row_ == (positionLeftDiagonal.row_ || positionRightDiagonal.row_) || targetPositionKing.col_ == (positionLeftDiagonal.col_ || positionRightDiagonal.col_))
+            {
+                return true;
+            }
+            return false;
         }
     };
 
@@ -767,8 +880,10 @@ namespace chess
 
         void PrintBoard(BoardPtr board)
         {
-            std::cout << PINK_COLOR << "     0  1  2  3  4  5  6  7\n" << RESET_COLOR;
-            std::cout << PINK_COLOR << "     A  B  C  D  E  F  G  H\n" << RESET_COLOR;
+            std::cout << PINK_COLOR << "     0  1  2  3  4  5  6  7\n"
+                      << RESET_COLOR;
+            std::cout << PINK_COLOR << "     A  B  C  D  E  F  G  H\n"
+                      << RESET_COLOR;
             for (int i = 7; i >= 0; i--)
             {
                 std::cout << PINK_COLOR << i << "|" << i + 1 << " " << RESET_COLOR;
@@ -806,8 +921,10 @@ namespace chess
                 std::cout << PINK_COLOR << " " << i + 1 << "|" << i << " " << RESET_COLOR;
                 std::cout << "\n";
             }
-            std::cout << PINK_COLOR << "     A  B  C  D  E  F  G  H\n" << RESET_COLOR;
-            std::cout << PINK_COLOR << "     0  1  2  3  4  5  6  7\n" << RESET_COLOR;
+            std::cout << PINK_COLOR << "     A  B  C  D  E  F  G  H\n"
+                      << RESET_COLOR;
+            std::cout << PINK_COLOR << "     0  1  2  3  4  5  6  7\n"
+                      << RESET_COLOR;
         }
 
         std::vector<PiecePtr> pieces_;
