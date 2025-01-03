@@ -70,7 +70,7 @@ struct King : Piece
                     }
                     else if (piece->doesItCheck(board, targetPosition))
                     {
-                        std::cout << "This square is attacked at : Row " << targetPosition.row_ << " Col " << targetPosition.col_ << ". By a " << piece->name_ << std::endl;
+                        std::cout << "The square at : Row " << targetPosition.row_ << " Col " << targetPosition.col_ << ", is attacked by a " << piece->name_ << std::endl;
                         return true;
                     }
                 }

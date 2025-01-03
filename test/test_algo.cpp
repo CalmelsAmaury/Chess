@@ -223,7 +223,7 @@ TEST(King, QueenCheck)
     EXPECT_TRUE(nextPos.size() == 2);
 }
 
-TEST(King, RookCheck)
+TEST(King, RookAndKnightAndKingCheck)
 {
     Model c;
     auto loaded = c.load("Chess4.cfg");
@@ -236,7 +236,7 @@ TEST(King, RookCheck)
     EXPECT_TRUE(piece != nullptr);
 
     auto nextPos = piece->nextPossibleMoves(board);
-    EXPECT_TRUE(nextPos.size() == 4);
+    EXPECT_TRUE(nextPos.size() == 1);
 }
 
 TEST(Board, PrintBoard)
