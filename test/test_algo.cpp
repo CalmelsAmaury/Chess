@@ -207,7 +207,7 @@ TEST(Knight, KnightBestMove)
 //    EXPECT_TRUE(best.position_.col_ == 2 || best.position_.col_ == 0);
 //}
 
-TEST(King, QueenCheck)
+TEST(King, QueenAndPawnCheck)
 {
     Model c;
     auto loaded = c.load("Chess3.cfg");
@@ -220,7 +220,7 @@ TEST(King, QueenCheck)
     EXPECT_TRUE(piece != nullptr);
 
     auto nextPos = piece->nextPossibleMoves(board);
-    EXPECT_TRUE(nextPos.size() == 2);
+    EXPECT_TRUE(nextPos.size() == 1);
 }
 
 TEST(King, RookAndKnightAndKingCheck)

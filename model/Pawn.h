@@ -112,10 +112,10 @@ struct Pawn : Piece
         bool doesItCheck(BoardPtr board, const Position &targetPositionKing) override
         {
             auto direction = getDirection();
-            Position positionLeftDiagonal(position_.row_ + direction, position_.col_ - 1);
-            Position positionRightDiagonal(position_.row_ + direction, position_.col_ + 1);
+            Position targetPositionLeftDiagonal(position_.row_ + direction, position_.col_ - 1);
+            Position targetPositionRightDiagonal(position_.row_ + direction, position_.col_ + 1);
 
-            if (targetPositionKing.row_ == (positionLeftDiagonal.row_ || positionRightDiagonal.row_) || targetPositionKing.col_ == (positionLeftDiagonal.col_ || positionRightDiagonal.col_))
+            if ((targetPositionLeftDiagonal.col_ == targetPositionKing.col_ && targetPositionLeftDiagonal.row_ == targetPositionKing.row_) || (targetPositionRightDiagonal.col_ == targetPositionKing.col_ && targetPositionRightDiagonal.row_ == targetPositionKing.row_))
             {
                 return true;
             }
