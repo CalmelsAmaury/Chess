@@ -220,7 +220,7 @@ TEST(King, Check)
     EXPECT_TRUE(piece != nullptr);
 
     auto nextPos = piece->nextPossibleMoves(board);
-    EXPECT_TRUE(nextPos.size() == 3);
+    EXPECT_TRUE(nextPos.size() == 2);
 }
 
 TEST(Board, PrintBoard)

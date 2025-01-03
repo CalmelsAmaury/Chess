@@ -16,10 +16,6 @@
 
 namespace chess
 {
-
-
-    
-
     /**
      * construit le model compose de pions, tours, etc
      */
