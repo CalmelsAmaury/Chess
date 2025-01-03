@@ -38,8 +38,6 @@ namespace chess
             std::string line;
             while (std::getline(file, line))
             {
-                // Print each line to the console
-                std::cout << line << std::endl;
                 auto v = splitString(line, ',');
                 auto row = std::stoi(v[4]) - 1;
                 auto col = v[3][0];
@@ -159,7 +157,6 @@ namespace chess
             {
                 int col = piece->position_.col_;
                 int row = piece->position_.row_;
-                std::cout << piece->toString() << std::endl;
                 if (col >= 0 && col < 8 && row >= 0 && row < 8)
                 {
                     BoardPositions &bp = ((*board)[row][col]);

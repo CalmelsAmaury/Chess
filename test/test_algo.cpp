@@ -207,7 +207,7 @@ TEST(Knight, KnightBestMove)
 //    EXPECT_TRUE(best.position_.col_ == 2 || best.position_.col_ == 0);
 //}
 
-TEST(King, Check)
+TEST(King, QueenCheck)
 {
     Model c;
     auto loaded = c.load("Chess3.cfg");
@@ -223,10 +223,26 @@ TEST(King, Check)
     EXPECT_TRUE(nextPos.size() == 2);
 }
 
+TEST(King, RookCheck)
+{
+    Model c;
+    auto loaded = c.load("Chess4.cfg");
+    EXPECT_TRUE(loaded);
+    auto board = c.CreateBoard();
+    c.PrintBoard(board);
+
+    auto pos = Position(4, 'd');
+    auto piece = Piece::getPiece(board, pos);
+    EXPECT_TRUE(piece != nullptr);
+
+    auto nextPos = piece->nextPossibleMoves(board);
+    EXPECT_TRUE(nextPos.size() == 4);
+}
+
 TEST(Board, PrintBoard)
 {
     Model c;
-    auto loaded = c.load("Chess3.cfg");
+    auto loaded = c.load("ChessInitialPosition.cfg");
     EXPECT_TRUE(loaded);
     auto board = c.CreateBoard();
     c.PrintBoard(board);

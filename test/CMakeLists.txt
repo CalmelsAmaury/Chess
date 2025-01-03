@@ -31,47 +31,24 @@ target_link_libraries(TestChess PRIVATE ChessLib gtest)
 add_test(NAME TestChess COMMAND TestChess)
 
 
-# Add a post-build custom command to copy the file to the test directory
-set(SOURCE_FILE_PATH "${CMAKE_SOURCE_DIR}/test/Chess.cfg")
- 
- # Copy Chess.cfg to the working directory
-add_custom_command(TARGET TestChess POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy ${SOURCE_FILE_PATH} "${CMAKE_BINARY_DIR}/test/Chess.cfg"
-  COMMENT "Copying Chess.cfg to the test working directory"
-)
+set(CHESS_CONFIGS Chess.cfg Chess2.cfg Chess3.cfg Chess4.cfg ChessInitialPosition.cfg)
 
-add_custom_command(TARGET TestChess POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy ${SOURCE_FILE_PATH} "$<TARGET_FILE_DIR:TestChess>/Chess.cfg"
-    COMMENT "Copying Chess.cfg to the test executable directory"
-)
+# Boucle pour copier chaque fichier de configuration
+foreach(CONFIG_FILE ${CHESS_CONFIGS})
+    set(SOURCE_FILE_PATH "${CMAKE_SOURCE_DIR}/test/${CONFIG_FILE}")
+    
+    # Copie vers le répertoire de build
+    add_custom_command(TARGET TestChess POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy ${SOURCE_FILE_PATH} "${CMAKE_BINARY_DIR}/test/${CONFIG_FILE}"
+        COMMENT "Copying ${CONFIG_FILE} to the test working directory"
+    )
 
-# Add a post-build custom command to copy the file to the test directory
-set(SOURCE_FILE_PATH "${CMAKE_SOURCE_DIR}/test/Chess2.cfg")
- 
- # Copy Chess2.cfg to the working directory
-add_custom_command(TARGET TestChess POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy ${SOURCE_FILE_PATH} "${CMAKE_BINARY_DIR}/test/Chess2.cfg"
-  COMMENT "Copying Chess2.cfg to the test working directory"
-)
-
-add_custom_command(TARGET TestChess POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy ${SOURCE_FILE_PATH} "$<TARGET_FILE_DIR:TestChess>/Chess2.cfg"
-    COMMENT "Copying Chess2.cfg to the test executable directory"
-)
-
-# Add a post-build custom command to copy the file to the test directory
-set(SOURCE_FILE_PATH "${CMAKE_SOURCE_DIR}/test/Chess3.cfg")
- 
- # Copy Chess3.cfg to the working directory
-add_custom_command(TARGET TestChess POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy ${SOURCE_FILE_PATH} "${CMAKE_BINARY_DIR}/test/Chess3.cfg"
-  COMMENT "Copying Chess3.cfg to the test working directory"
-)
-
-add_custom_command(TARGET TestChess POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy ${SOURCE_FILE_PATH} "$<TARGET_FILE_DIR:TestChess>/Chess3.cfg"
-    COMMENT "Copying Chess3.cfg to the test executable directory"
-)
+    # Copie vers le répertoire de l'exécutable
+    add_custom_command(TARGET TestChess POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy ${SOURCE_FILE_PATH} "$<TARGET_FILE_DIR:TestChess>/${CONFIG_FILE}"
+        COMMENT "Copying ${CONFIG_FILE} to the test executable directory"
+    )
+endforeach()
  
 
  
