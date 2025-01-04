@@ -89,9 +89,9 @@ Attendre la validation de cette étape. VALIDE LE 2/12/2024
 VALIDE LE 27/12/2024
 
 # 8 - Refactoriser l'application avec un fichier par piece, un fichier pour le modèle
-
+VALIDE LE 3/1/2025
 
 # N - exercice d'explication oral à Fabrice & Marylise du code (à la Feynman)
 
-Attendre la validation de cette étape. 
+ 
 
