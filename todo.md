@@ -91,6 +91,23 @@ VALIDE LE 27/12/2024
 # 8 - Refactoriser l'application avec un fichier par piece, un fichier pour le modèle
 VALIDE LE 3/1/2025
 
+# 9 - Application Front (partie A)
+
+Le jeux sera jouable depuis une page internet via une interface utilisateur écrite en React Typescript Css et utilisant NextJs.
+Le jeux permet à deux utilisateur de commencer et de jouer une partie ensemble. L'IA (fonction bestMove c++) sera appelée pour donner une 
+indication à l'utilisateur de la meilleur pièce à jouer.
+
+L'application Front doit être dans le dossier Presentation.
+Utiliser un fichier css pour le design (pas de Tailwind)
+
+1 - créer une appli NextJS en mode Typescript 
+
+2 - créer un composant React functional pour afficher une board 
+
+
+
+
+
 # N - exercice d'explication oral à Fabrice & Marylise du code (à la Feynman)
 
  
