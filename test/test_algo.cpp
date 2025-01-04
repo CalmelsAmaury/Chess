@@ -101,6 +101,8 @@ TEST(Rook, RookBestMove)
     auto loaded = c.load("Chess.cfg");
     EXPECT_TRUE(loaded);
     auto board = c.CreateBoard();
+    PrintingBoard p;
+    p.PrintBoard(board);
 
     auto pos = Position(3, 'h');
     auto piece = Piece::getPiece(board, pos);
@@ -120,6 +122,8 @@ TEST(Bishop, BishopBestMove)
     auto loaded = c.load("Chess.cfg");
     EXPECT_TRUE(loaded);
     auto board = c.CreateBoard();
+    PrintingBoard p;
+    p.PrintBoard(board);
 
     auto pos = Position(4, 'f');
     auto piece = Piece::getPiece(board, pos);
@@ -139,6 +143,8 @@ TEST(Queen, QueenBestMove)
     auto loaded = c.load("Chess.cfg");
     EXPECT_TRUE(loaded);
     auto board = c.CreateBoard();
+    PrintingBoard p;
+    p.PrintBoard(board);
 
     auto pos = Position(5, 'f');
     auto piece = Piece::getPiece(board, pos);
@@ -158,6 +164,8 @@ TEST(Knight, KnightBestMove)
     auto loaded = c.load("Chess.cfg");
     EXPECT_TRUE(loaded);
     auto board = c.CreateBoard();
+    PrintingBoard p;
+    p.PrintBoard(board);
 
     auto pos = Position(5, 'c');
     auto piece = Piece::getPiece(board, pos);
@@ -171,42 +179,46 @@ TEST(Knight, KnightBestMove)
     EXPECT_TRUE(best.position_.col_ == 1);
 }
 
-//TEST(King, KingBestMove)
-//{
-//    Model c;
-//    auto loaded = c.load("Chess.cfg");
-//    EXPECT_TRUE(loaded);
-//    auto board = c.CreateBoard();
-//
-//    auto pos = Position(0, 'e');
-//    auto piece = Piece::getPiece(board, pos);
-//    EXPECT_TRUE(piece != nullptr);
-//
-//    auto nextPos = piece->nextPossibleMoves(board);
-//    NextMove best = piece->bestMove(nextPos);
-//    EXPECT_TRUE(best.action_.piece_ == nullptr);
-//    EXPECT_TRUE(best.position_.row_ == 1);
-//    EXPECT_TRUE(best.position_.col_ == 4);
-//}
+TEST(King, KingBestMove)
+{
+    Model c;
+    auto loaded = c.load("Chess.cfg");
+    EXPECT_TRUE(loaded);
+    auto board = c.CreateBoard();
+    PrintingBoard p;
+    p.PrintBoard(board);
 
-//TEST(Chess, BestMovesAllPieces)
-//{
-//    Model c;
-//    auto loaded = c.load("Chess2.cfg");
-//    EXPECT_TRUE(loaded);
-//    auto board = c.CreateBoard();
-//    ChessAlgorithm algo;
-//    NextMove best = algo.bestMove(c, Color::white);
-//    EXPECT_TRUE(best.action_.piece_ != nullptr);
-//    EXPECT_TRUE(best.action_.piece_->name_ == "Pawn");
-//    EXPECT_TRUE(best.position_.row_ == 4);
-//    EXPECT_TRUE(best.position_.col_ == 1);
-//    best = algo.bestMove(c, Color::black);
-//    EXPECT_TRUE(best.action_.piece_ != nullptr);
-//    EXPECT_TRUE(best.action_.piece_->name_ == "Pawn");
-//    EXPECT_TRUE(best.position_.row_ == 1 || best.position_.row_ == 1);
-//    EXPECT_TRUE(best.position_.col_ == 2 || best.position_.col_ == 0);
-//}
+    auto pos = Position(0, 'e');
+    auto piece = Piece::getPiece(board, pos);
+    EXPECT_TRUE(piece != nullptr);
+
+    auto nextPos = piece->nextPossibleMoves(board);
+    NextMove best = piece->bestMove(nextPos);
+    EXPECT_TRUE(best.action_.piece_ == nullptr);
+    EXPECT_TRUE(best.position_.row_ == 1);
+    EXPECT_TRUE(best.position_.col_ == 4);
+}
+
+TEST(Chess, BestMovesAllPieces)
+{
+    Model c;
+    auto loaded = c.load("Chess2.cfg");
+    EXPECT_TRUE(loaded);
+    auto board = c.CreateBoard();
+    PrintingBoard p;
+    p.PrintBoard(board);
+    ChessAlgorithm algo;
+    NextMove best = algo.bestMove(c, Color::white);
+    EXPECT_TRUE(best.action_.piece_ != nullptr);
+    EXPECT_TRUE(best.action_.piece_->name_ == "Pawn");
+    EXPECT_TRUE(best.position_.row_ == 2);
+    EXPECT_TRUE(best.position_.col_ == 7);
+    best = algo.bestMove(c, Color::black);
+    EXPECT_TRUE(best.action_.piece_ != nullptr);
+    EXPECT_TRUE(best.action_.piece_->name_ == "Pawn");
+    EXPECT_TRUE(best.position_.row_ == 1 || best.position_.row_ == 1);
+    EXPECT_TRUE(best.position_.col_ == 2 || best.position_.col_ == 0);
+}
 
 TEST(King, QueenAndPawnCheck)
 {
@@ -225,7 +237,7 @@ TEST(King, QueenAndPawnCheck)
     EXPECT_TRUE(nextPos.size() == 1);
 }
 
-TEST(King, RookAndKnightAndKingCheck)
+TEST(King, RookKnightKingBishopCheck)
 {
     Model c;
     auto loaded = c.load("Chess4.cfg");
