@@ -1,0 +1,34 @@
+h2 {
+    background: rgba(36, 36, 36, 0.568);
+    align-items: center;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    position: fixed;
+    top: -20;
+    left: 0;
+    height: 100vh;          
+    width: clamp(30px, 10vw, 110px);
+    padding: 20px;
+    font-size: clamp(12px, 2vw, 24px);
+    transition: font-size 0.8s ease, width 0.8s;
+}
+
+@media (max-width: 1400px) {
+    h2 {
+        width: 10px;  
+        padding: 10px;
+        font-size: 0;
+    }
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgb(54, 54, 54); 
+    color: #ffffff;
+}
+
+.no-select {
+    user-select: none;
+}
