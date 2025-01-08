@@ -24,11 +24,15 @@ enable_testing()
 # Add the test executable
 add_executable(TestChess test_algo.cpp)
 
+add_executable(TestBack test_back.cpp)
+
 # Link the test executable with the code under test
 target_link_libraries(TestChess PRIVATE ChessLib gtest)
+target_link_libraries(TestBack PRIVATE ChessLib gtest)
 
 # Add the test to CTest
 add_test(NAME TestChess COMMAND TestChess)
+add_test(NAME TestBack COMMAND TestBack)
 
 
 set(CHESS_CONFIGS Chess.cfg Chess2.cfg Chess3.cfg Chess4.cfg ChessInitialPosition.cfg)

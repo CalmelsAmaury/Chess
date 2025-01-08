@@ -1,0 +1,13 @@
+-revoir assert google test
+-revoir allocation memoire c++(new, delete, pointeur, reference)
+-revoir authorisation dans l'heritage de classe
+-revoir l'acces aux pointeurs/ reference.
+-revoir les valeurs d'initialisation des donnees de classe
+-revoir virtual pure
+-revoir appel de constructeur
+-revoir les std::vector
+-revoir shared_ptr
+-revoir le using
+-apprendre les templates.
+
+-comprendre l'implementation de MySharePtdr
