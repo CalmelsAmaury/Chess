@@ -1,0 +1,58 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" version="24.7.17">
+  <diagram name="Page-1" id="H0xkNvkovuKGo1Nkret5">
+    <mxGraphModel dx="776" dy="909" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="UStcyOvw_XqlAZ2jQlUE-1" value="Web App React" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="360" y="160" width="110" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="UStcyOvw_XqlAZ2jQlUE-2" value="NetxJS Server" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="360" y="359" width="110" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="UStcyOvw_XqlAZ2jQlUE-3" value="C++ Chess" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="560" y="359" width="110" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="UStcyOvw_XqlAZ2jQlUE-4" value="DB" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" vertex="1" parent="1">
+          <mxGeometry x="385" y="600" width="60" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="UStcyOvw_XqlAZ2jQlUE-5" value="" style="shape=flexArrow;endArrow=classic;startArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="UStcyOvw_XqlAZ2jQlUE-2" target="UStcyOvw_XqlAZ2jQlUE-1">
+          <mxGeometry width="100" height="100" relative="1" as="geometry">
+            <mxPoint x="530" y="630" as="sourcePoint" />
+            <mxPoint x="630" y="530" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="UStcyOvw_XqlAZ2jQlUE-6" value="" style="shape=flexArrow;endArrow=classic;startArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="UStcyOvw_XqlAZ2jQlUE-4">
+          <mxGeometry width="100" height="100" relative="1" as="geometry">
+            <mxPoint x="414.5" y="558" as="sourcePoint" />
+            <mxPoint x="414.5" y="469" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="UStcyOvw_XqlAZ2jQlUE-7" value="" style="shape=flexArrow;endArrow=classic;startArrow=classic;html=1;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="UStcyOvw_XqlAZ2jQlUE-3" target="UStcyOvw_XqlAZ2jQlUE-2">
+          <mxGeometry width="100" height="100" relative="1" as="geometry">
+            <mxPoint x="435" y="379" as="sourcePoint" />
+            <mxPoint x="435" y="290" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="UStcyOvw_XqlAZ2jQlUE-8" value="" style="shape=flexArrow;endArrow=classic;startArrow=classic;html=1;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="UStcyOvw_XqlAZ2jQlUE-2" target="UStcyOvw_XqlAZ2jQlUE-9">
+          <mxGeometry width="100" height="100" relative="1" as="geometry">
+            <mxPoint x="210.5" y="545" as="sourcePoint" />
+            <mxPoint x="210" y="414" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="UStcyOvw_XqlAZ2jQlUE-9" value="LLM (llama)&lt;br&gt;Python" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="150" y="359" width="110" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="UStcyOvw_XqlAZ2jQlUE-10" value="Partie" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="480" y="610" width="200" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="UStcyOvw_XqlAZ2jQlUE-11" value="Actor" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="120" y="110" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="UStcyOvw_XqlAZ2jQlUE-12" value="Actor" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="680" y="120" width="30" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
