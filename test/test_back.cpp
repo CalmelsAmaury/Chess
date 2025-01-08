@@ -80,10 +80,10 @@ double calculSurfaces(std::vector<ShapePtr> shapes)
 
 TEST(All, Surface)
 {
-    ShapePtr c = std::make_shared<Shape>(new Circle(10));
-    ShapePtr d = std::make_shared<Shape>(new Rectangle(10,2));
-    ShapePtr e = std::make_shared<Shape>(new Circle(5));
-    ShapePtr f = std::make_shared<Shape>(new Carre(5,12.4));
+    ShapePtr c = std::make_shared<Circle>(10);
+    ShapePtr d = std::make_shared<Rectangle>(10,2);
+    ShapePtr e = std::make_shared<Circle>(5);
+    ShapePtr f = std::make_shared<Carre>(5,12.4);
     std::vector<ShapePtr> shapes{c, d, e, f};
     double surfaces = calculSurfaces(shapes);
 
