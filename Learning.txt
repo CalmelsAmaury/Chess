@@ -9,5 +9,7 @@
 -revoir shared_ptr
 -revoir le using
 -apprendre les templates.
+-revoir explicit
+-revoir static_cast
 
 -comprendre l'implementation de MySharePtdr

@@ -7,10 +7,8 @@ const HomePage: React.FC = () => {
   return (
     <Layout>
       <div className="no-select">
-        <h1>
-          <h2>Amaury&apos;s Chess</h2>
-          <Board size={8} />
-        </h1>
+        <h2>Amaury&apos;s Chess</h2>
+        <Board size={8} />
       </div>
     </Layout>
   );

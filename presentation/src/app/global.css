@@ -9,10 +9,10 @@ h2 {
     width: clamp(30px, 10vw, 110px);
     padding: 20px;
     font-size: clamp(12px, 2vw, 24px);
-    transition: font-size 0.8s ease, width 0.8s;
+    transition: font-size 0.5s ease, width 0.5s;
 }
 
-@media (max-width: 1400px) {
+@media (max-width: 1000px) {
     h2 {
         width: 10px;  
         padding: 10px;
@@ -27,6 +27,7 @@ body {
     width: 100%;
     background-color: rgb(54, 54, 54); 
     color: #ffffff;
+    
 }
 
 .no-select {
